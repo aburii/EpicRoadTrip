@@ -1,5 +1,5 @@
 {
-  "name": "@fastbun-starter/front",
+  "name": "@roadtrip/front",
   "private": true,
   "type": "module",
   "scripts": {
