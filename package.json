@@ -9,19 +9,12 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@nuxtjs/eslint-module": "^4.1.0",
-    "eslint-config-custom": "*",
-    "@roadtrip/typescript-config": "*",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
-    "prettier": "^3.2.5",
     "turbo": "latest"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "bun@1.0.21",
+  "packageManager": "bun@1.0.30",
   "workspaces": [
     "apps/*",
     "packages/*"

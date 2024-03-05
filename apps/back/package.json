@@ -9,10 +9,7 @@
   },
   "dependencies": {
     "elysia": "latest",
-    "eslint-config-custom": "*"
-  },
-  "devDependencies": {
-    "bun-types": "latest"
-  },
-  "module": "src/index.js"
+    "eslint-config-custom": "*",
+    "@roadtrip/typescript-config": "*"
+  }
 }
