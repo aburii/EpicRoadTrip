@@ -1,9 +1,9 @@
 {
-  "name": "@roadtrip/eslint-config",
-  "version": "0.0.0",
+  "name": "eslint-config-custom",
+  "version": "1.0.0",
   "private": true,
   "files": [
-    "library.js"
+    "index.js"
   ],
   "devDependencies": {
     "eslint-config-turbo": "^1.11.3",
