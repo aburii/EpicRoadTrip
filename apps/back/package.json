@@ -10,6 +10,7 @@
   "dependencies": {
     "elysia": "latest",
     "eslint-config-custom": "*",
-    "@roadtrip/typescript-config": "*"
+    "@roadtrip/typescript-config": "*",
+    "@roadtrip/supabase": "*"
   }
 }

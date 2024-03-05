@@ -1,4 +1,5 @@
 import { Elysia } from "elysia";
+import { supabase } from '@roadtrip/supabase';
 
 const app = new Elysia().get("/", () => "Hello Elysia").listen(3001);
 
