@@ -4,27 +4,33 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Lana'
+      title: "Lana",
     },
     pageTransition: {
-      name: 'fade',
-      mode: 'out-in'
-    }
+      name: "fade",
+      mode: "out-in",
+    },
   },
 
   colorMode: {
     preference: "light",
   },
 
-  css: ['~/assets/main.css'],
+  css: ["~/assets/main.css"],
 
-  modules: ['@nuxt/ui', '@vueuse/nuxt', ["@nuxtjs/google-fonts", {
-    families: {
-      Roboto: true,
-      Raleway: true,
-    }
-  }]],
-
+  modules: [
+    "@nuxt/ui",
+    "@vueuse/nuxt",
+    [
+      "@nuxtjs/google-fonts",
+      {
+        families: {
+          Roboto: true,
+          Raleway: true,
+        },
+      },
+    ],
+  ],
 
   typescript: {
     strict: true,
