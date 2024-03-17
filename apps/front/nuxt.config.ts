@@ -12,6 +12,8 @@ export default defineNuxtConfig({
     },
   },
 
+  nitro: {},
+
   colorMode: {
     preference: "light",
   },
