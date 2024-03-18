@@ -1,9 +1,4 @@
-import { createClient, type User } from "@supabase/supabase-js";
-
-const runtimeConfig = useRuntimeConfig();
-const supabaseKey = `${runtimeConfig.public.SUPABASE_KEY}`;
-const supabaseUrl = `${runtimeConfig.public.SUPABASE_URL}`;
-const supabase = createClient(supabaseUrl, supabaseKey);
+const { supabase } = useSupabase();
 
 export default function useSupabaseAuth() {
   const user = ref<User | null>(null);

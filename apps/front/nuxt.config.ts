@@ -12,11 +12,8 @@ export default defineNuxtConfig({
     },
   },
 
-<<<<<<< HEAD
   nitro: {},
 
-=======
->>>>>>> 68fd2c4 (feat : Supabase auth)
   colorMode: {
     preference: "light",
   },
@@ -26,10 +23,6 @@ export default defineNuxtConfig({
   modules: [
     "@nuxt/ui",
     "@vueuse/nuxt",
-<<<<<<< HEAD
-=======
-    "@pinia/nuxt",
->>>>>>> 68fd2c4 (feat : Supabase auth)
     [
       "@nuxtjs/google-fonts",
       {
@@ -40,10 +33,7 @@ export default defineNuxtConfig({
       },
     ],
   ],
-<<<<<<< HEAD
-=======
   ssr: false,
->>>>>>> 68fd2c4 (feat : Supabase auth)
 
   typescript: {
     strict: true,
