@@ -1,12 +1,18 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { data, execute } = useFetch("/api/health");
+
+const appHealthy = computed(() => {
+  return data.value?.healthy;
+});
+</script>
 
 <template>
   <UCard class="mt-2 ml-2 w-1/3">
     <template #default>
-      <span>Hi i'm sam</span>
+      <span>{{ appHealthy }}</span>
     </template>
     <template #footer>
-      <UButton to="/demo" size="xl"> Click to test </UButton>
+      <UButton size="xl" @click="execute"> Click to test </UButton>
     </template>
   </UCard>
 </template>
