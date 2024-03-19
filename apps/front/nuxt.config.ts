@@ -33,9 +33,17 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  ssr: false,
 
   typescript: {
     strict: true,
     shim: false,
+  },
+
+  runtimeConfig: {
+    public: {
+      SUPABASE_KEY: process.env.NUXT_PUBLIC_SUPABASE_KEY,
+      SUPABASE_URL: process.env.NUXT_PUBLIC_SUPABASE_URL,
+    },
   },
 });
