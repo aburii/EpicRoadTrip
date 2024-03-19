@@ -12,6 +12,12 @@ export default defineNuxtConfig({
     },
   },
 
+  fonts: {
+    experimental: {
+      processCSSVariables: true,
+    },
+  },
+
   nitro: {},
 
   colorMode: {
@@ -20,19 +26,7 @@ export default defineNuxtConfig({
 
   css: ["~/assets/main.css"],
 
-  modules: [
-    "@nuxt/ui",
-    "@vueuse/nuxt",
-    [
-      "@nuxtjs/google-fonts",
-      {
-        families: {
-          Roboto: true,
-          Raleway: true,
-        },
-      },
-    ],
-  ],
+  modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxt/fonts"],
   ssr: false,
 
   typescript: {
