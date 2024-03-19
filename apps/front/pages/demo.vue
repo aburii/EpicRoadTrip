@@ -1,13 +1,14 @@
 <script setup lang="ts">
-const { data } = useFetch('/api/directions', {
+const { data } = useFetch('/api/places', {
   query: {
-    origin: 'Toronto',
-    destination: 'Montreal',
+    location: '-33.8670522,151.1957362',
+    type: 'restaurant',
+    radius: 50000,
   },
 });
 
 const directionsData = computed(() => {
-  return data;
+  return data.value?.status;
 });
 </script>
 
@@ -17,7 +18,7 @@ const directionsData = computed(() => {
       <span>{{ directionsData }}</span>
     </template>
     <template #footer>
-      <UButton size="xl"> Click to test </UButton>
+      <UButton size="xl"> Click to test</UButton>
     </template>
   </UCard>
 </template>
