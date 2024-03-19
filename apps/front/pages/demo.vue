@@ -8,20 +8,25 @@ const { data } = useFetch('/api/places', {
   },
 });
 
+const { $supabase } = useNuxtApp();
+
 const directionsData = computed(() => {
   return data.value?.status;
 });
 </script>
 
 <template>
-  <UCard class="mt-2 ml-2 w-1/3">
-    <template #default>
-      <span>{{ directionsData }}</span>
-    </template>
-    <template #footer>
-      <UButton size="xl"> Click to test</UButton>
-    </template>
-  </UCard>
+  <div>
+    <UCard class="mt-2 ml-2 w-1/3">
+      <template #default>
+        <span>{{ directionsData }}</span>
+      </template>
+      <template #footer>
+        <UButton size="xl"> Click to test </UButton>
+      </template>
+    </UCard>
+    <span>{{ $supabase }}</span>
+  </div>
 </template>
 
 <style scoped></style>
