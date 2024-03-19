@@ -7,6 +7,7 @@ type QueryType = {
 };
 
 export default defineEventHandler(async (event): Promise<DirectionsRes> => {
+  const config = useRuntimeConfig(event);
   const query: QueryType = getQuery(event);
   const data: DirectionsRes = await $fetch(directionsUrl, {
     method: 'GET',
@@ -14,7 +15,7 @@ export default defineEventHandler(async (event): Promise<DirectionsRes> => {
       origin: query.origin,
       destination: query.destination,
       waypoints: query.waipoints,
-      key: process.env.GOOGLE_API_KEY,
+      key: config.googleApiKey,
     },
   });
   return data;
