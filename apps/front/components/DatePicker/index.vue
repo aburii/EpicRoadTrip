@@ -4,7 +4,6 @@ import type { DatePickerRange } from "~/types/date-picker";
 
 defineProps<{
   innerStyle: string;
-  popOverDirection: string;
   ranges: DatePickerRange[];
 }>();
 
@@ -27,11 +26,12 @@ function selectRange(duration: Duration) {
 </script>
 
 <template>
-  <UPopover v-if="selected" :popper="{ placement: popOverDirection }">
+  <UPopover v-if="selected" :popper="{ placement: 'auto' }">
     <UButton
       icon="i-heroicons-calendar-days-20-solid"
       size="lg"
       :ui="{
+        base: 'overflow-hidden text-ellipsis whitespace-nowrap',
         rounded: 'rounded-none',
         color: {
           primary: {
