@@ -13,7 +13,6 @@ const { locales } = i18n;
           color="black"
           variant="ghost"
           :trailing="false"
-          @click="i18n.setLocale('fr')"
         />
 
         <template #panel>
