@@ -40,6 +40,7 @@ export default {
       },
       fontFamily: {
         sans: "var(--font-family)",
+        title: "var(--font-title)",
       },
     },
   },
