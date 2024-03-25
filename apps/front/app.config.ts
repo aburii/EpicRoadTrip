@@ -29,7 +29,6 @@ export default defineAppConfig({
             "shadow-none bg-transparent dark:bg-transparent text-gray-900 dark:text-white ring-0 ring-transparent dark:ring-transparent focus:ring-0 focus:ring-0 dark:focus:ring-0",
         },
       },
-
       icon: {
         base: "text-primary",
       },

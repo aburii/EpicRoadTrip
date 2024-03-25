@@ -30,6 +30,7 @@
     "@supabase/supabase-js": "^2.39.8",
     "date-fns": "^3.6.0",
     "gsap": "^3.12.5",
-    "v-calendar": "next"
+    "v-calendar": "next",
+    "zod": "^3.22.4"
   }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <header class="min-h-[80px] md:px-16 px-4 py-2 bg-transparent">
+  <header class="min-h-[80px] bg-blue-500 md:px-16 px-4 py-2 bg-transparent">
     <section class="w-full h-full flex items-center justify-between">
       <UButton
         icon="i-heroicons-language"
