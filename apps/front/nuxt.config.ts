@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  ssr: false,
 
   app: {
     head: {
@@ -12,9 +13,36 @@ export default defineNuxtConfig({
     },
   },
 
+  modules: [
+    "@nuxt/ui",
+    "@vueuse/nuxt",
+    "@nuxt/fonts",
+    "@nuxtjs/i18n",
+    "@pinia/nuxt",
+  ],
+
   fonts: {
     experimental: {
       processCSSVariables: true,
+    },
+  },
+
+  i18n: {
+    vueI18n: "./i18n.config.ts",
+    locales: [
+      {
+        code: "en",
+        name: "English",
+      },
+      {
+        code: "fr",
+        name: "Français",
+      },
+    ],
+    detectBrowserLanguage: {
+      fallbackLocale: "en",
+      useCookie: true,
+      cookieKey: "nuxt-i18n-locale",
     },
   },
 
@@ -25,9 +53,6 @@ export default defineNuxtConfig({
   },
 
   css: ["~/assets/main.css"],
-
-  modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxt/fonts"],
-  ssr: false,
 
   typescript: {
     strict: true,
