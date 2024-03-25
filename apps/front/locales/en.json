@@ -1,3 +1,33 @@
 {
-  "landing": "poop"
+  "travelPrefix": "Where do you want",
+  "travelKeywords": [
+    "to travel ?",
+    "to have a good time?",
+    "to roadtrip?",
+    "dream ?"
+  ],
+  "datePicker": {
+    "ranges": {
+      "oneDay": "1 day",
+      "oneWeek": "1 week",
+      "twoWeek": "2 weeks",
+      "oneMonth": "1 month",
+      "threeMonths": "3 months",
+      "sixMonths": "6 months",
+      "oneYear": "1 year"
+    }
+  },
+  "landing": {
+    "form": {
+      "departure": "from",
+      "arrival": "to",
+      "price": "Price (optional)",
+      "cta": "Travel !"
+    }
+  },
+  "footer": {
+    "copyrights": "All rights reserved.",
+    "termsOfUse": "Terms of use",
+    "privacy": "Privacy"
+  }
 }

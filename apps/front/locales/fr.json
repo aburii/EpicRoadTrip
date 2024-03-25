@@ -1,3 +1,33 @@
 {
-  "landing": ["merde", "caca"]
+  "travelPrefix": "Où voulez-vous",
+  "travelKeywords": [
+    "rider la puff ?",
+    "kiffer votre vie ?",
+    "faire un roadtrip ?",
+    "voyager ?"
+  ],
+  "datePicker": {
+    "ranges": {
+      "oneDay": "1 jour",
+      "oneWeek": "1 semaine",
+      "twoWeek": "1 semaine",
+      "oneMonth": "1 mois",
+      "threeMonths": "3 mois",
+      "sixMonths": "6 mois",
+      "oneYear": "1 an"
+    }
+  },
+  "landing": {
+    "form": {
+      "departure": "depuis",
+      "arrival": "à",
+      "price": "Prix (optionnel)",
+      "cta": "Voyager !"
+    }
+  },
+  "footer": {
+    "copyrights": "Tous droits réservés.",
+    "termsOfUse": "Conditions d'utilisation",
+    "privacy": "Confidentialité"
+  }
 }

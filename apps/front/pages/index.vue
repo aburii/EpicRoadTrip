@@ -8,21 +8,18 @@ definePageMeta({
   layout: "landing",
 });
 
-const travelSentences = [
-  "rider la puff ?",
-  "kiffer votre vie ?",
-  "faire un roadtrip ?",
-  "voyager ?",
-];
+const { t, tm } = useI18n();
+
+const travelSentences = tm("travelKeywords");
 
 const ranges = [
-  { label: "1 jour", duration: { days: 1 } },
-  { label: "1 semaine", duration: { days: 7 } },
-  { label: "2 semaines", duration: { days: 14 } },
-  { label: "1 mois", duration: { months: 1 } },
-  { label: "3 mois", duration: { months: 3 } },
-  { label: "6 mois", duration: { months: 6 } },
-  { label: "1 an", duration: { years: 1 } },
+  { label: t("datePicker.ranges.oneDay"), duration: { days: 1 } },
+  { label: t("datePicker.ranges.oneDay"), duration: { days: 7 } },
+  { label: t("datePicker.ranges.oneDay"), duration: { days: 14 } },
+  { label: t("datePicker.ranges.oneDay"), duration: { months: 1 } },
+  { label: t("datePicker.ranges.oneDay"), duration: { months: 3 } },
+  { label: t("datePicker.ranges.oneDay"), duration: { months: 6 } },
+  { label: t("datePicker.ranges.oneDay"), duration: { years: 1 } },
 ];
 
 const cities = ["Paris", "Londres", "New York", "Singapour"];
@@ -61,7 +58,7 @@ const invertDestinations = () => {
   <section class="flex h-full w-full md:items-center justify-normal">
     <section class="md:h-1/3 h-full w-full px-[10px] flex flex-col">
       <h2 class="md:text-5xl text-4xl font-bold leading-snug">
-        Où voulez vous
+        {{ t("travelPrefix") }}
         <AppTextWriter
           id="travelSentence"
           :duration="1"
@@ -83,7 +80,7 @@ const invertDestinations = () => {
               v-model="state.price"
               class="w-fit"
               :options="prices"
-              placeholder="Prix (optionnel)"
+              :placeholder="t('landing.form.price')"
             />
           </div>
           <div class="lg:flex lg:items-center lg:justify-between">
@@ -92,7 +89,7 @@ const invertDestinations = () => {
             >
               <InputMenuCities
                 v-model="state.departure"
-                placeholder="Depuis"
+                :placeholder="t('landing.form.departure')"
                 size="lg"
                 :options="cities"
               />
@@ -105,7 +102,7 @@ const invertDestinations = () => {
               />
               <InputMenuCities
                 v-model="state.arrival"
-                placeholder="à"
+                :placeholder="t('landing.form.arrival')"
                 size="lg"
                 :options="cities"
               />
@@ -119,7 +116,7 @@ const invertDestinations = () => {
             </div>
             <div class="mt-16 lg:mt-0 lg:w-1/4 w-full">
               <UButton
-                label="Voyager !"
+                :label="t('landing.form.cta')"
                 padded
                 block
                 class="w-full lg:w-4/5 text-center font-bold lg:ms-auto"
