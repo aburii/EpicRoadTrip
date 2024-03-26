@@ -10,7 +10,7 @@ export function calculateDestinationCoordinates(
   initialLatitude: number,
   initialLongitude: number,
   distance: number,
-  direction: number
+  direction: number,
 ): { latitude: number; longitude: number } {
   const earthRadius = 6371;
   const initialLatRad = toRadians(initialLatitude);
@@ -19,14 +19,19 @@ export function calculateDestinationCoordinates(
 
   const newLatitude = Math.asin(
     Math.sin(initialLatRad) * Math.cos(distance / earthRadius) +
-      Math.cos(initialLatRad) * Math.sin(distance / earthRadius) * Math.cos(directionRad)
+      Math.cos(initialLatRad) *
+        Math.sin(distance / earthRadius) *
+        Math.cos(directionRad),
   );
 
   const newLongitude =
     initialLongRad +
     Math.atan2(
-      Math.sin(directionRad) * Math.sin(distance / earthRadius) * Math.cos(initialLatRad),
-      Math.cos(distance / earthRadius) - Math.sin(initialLatRad) * Math.sin(newLatitude)
+      Math.sin(directionRad) *
+        Math.sin(distance / earthRadius) *
+        Math.cos(initialLatRad),
+      Math.cos(distance / earthRadius) -
+        Math.sin(initialLatRad) * Math.sin(newLatitude),
     );
 
   const newLatDeg: number = toDegrees(newLatitude);

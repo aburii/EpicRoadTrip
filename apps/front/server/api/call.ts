@@ -1,7 +1,12 @@
-import { DirectionsRes, directionsUrl, PlacesRes, placesUrl } from '@roadtrip/google-api';
+import {
+  DirectionsRes,
+  directionsUrl,
+  PlacesRes,
+  placesUrl,
+} from "@roadtrip/google-api";
 
 type QueryType = {
-  places_type?: 'restaurant' | 'hotel' | 'activity' | 'bar';
+  places_type?: "restaurant" | "hotel" | "activity" | "bar";
   origin: string;
   destination: string;
   waypoints?: string[];
@@ -33,7 +38,7 @@ export default defineEventHandler(async (event) => {
 
   const query: QueryType = getQuery(event);
   const directions: DirectionsRes = await $fetch(directionsUrl, {
-    method: 'GET',
+    method: "GET",
     query: {
       origin: query.origin,
       destination: query.destination,
@@ -60,7 +65,7 @@ export default defineEventHandler(async (event) => {
   for (let i = 0; i < routes.length; i++) {
     const route = routes[i];
     const place: PlacesRes = await $fetch(placesUrl, {
-      method: 'GET',
+      method: "GET",
       query: {
         location: `${route.lat},${route.long}`,
         type: query.places_type,
@@ -75,7 +80,7 @@ export default defineEventHandler(async (event) => {
         long: result.geometry.location.lng,
         rating: result.rating,
         isOpen: result.opening_hours?.open_now as boolean,
-        imgRef: result.photos ? result.photos[0].photo_reference : '',
+        imgRef: result.photos ? result.photos[0].photo_reference : "",
         price_level: result.price_level as number,
         types: result.types,
       });
@@ -83,7 +88,7 @@ export default defineEventHandler(async (event) => {
   }
 
   return {
-    status: directions.status === 'OK' ? 'OK' : 'FAIL',
+    status: directions.status === "OK" ? "OK" : "FAIL",
     routes,
     places,
   };

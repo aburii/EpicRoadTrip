@@ -1,4 +1,4 @@
-import { DirectionsRes, directionsUrl } from '@roadtrip/google-api';
+import { DirectionsRes, directionsUrl } from "@roadtrip/google-api";
 
 type QueryType = {
   origin: string;
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event): Promise<DirectionsRes> => {
   const config = useRuntimeConfig(event);
   const query: QueryType = getQuery(event);
   const data: DirectionsRes = await $fetch(directionsUrl, {
-    method: 'GET',
+    method: "GET",
     query: {
       origin: query.origin,
       destination: query.destination,
