@@ -22,13 +22,11 @@ const ranges = [
   { label: t("datePicker.ranges.oneDay"), duration: { years: 1 } },
 ];
 
-const cities = ["Paris", "Londres", "New York", "Singapour"];
-
 const prices = ["$", "$$", "$$$", "$$$$"];
 
 const schema = z.object({
-  departure: z.string(),
-  arrival: z.string(),
+  departure: z.object({ id: z.string(), name: z.string() }),
+  arrival: z.object({ id: z.string(), name: z.string() }),
   price: z.string().optional(),
   range: z.object({ start: z.date(), end: z.date() }),
 });
@@ -91,7 +89,6 @@ const invertDestinations = () => {
                 v-model="state.departure"
                 :placeholder="t('landing.form.departure')"
                 size="lg"
-                :options="cities"
               />
               <UButton
                 variant="ghost"
@@ -104,7 +101,6 @@ const invertDestinations = () => {
                 v-model="state.arrival"
                 :placeholder="t('landing.form.arrival')"
                 size="lg"
-                :options="cities"
               />
               <DatePicker
                 v-model="state.range"
