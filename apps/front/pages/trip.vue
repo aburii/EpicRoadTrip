@@ -128,7 +128,7 @@
           </UCard>
           <UCard>
             <img
-              :src="`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${selectedItem?.imgRef}&key=AIzaSyBpBbVCllSAnRoSgHV2QcWdGPHfc8S2mJI`"
+              :src="`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${selectedItem?.imgRef}&key=${apiKey}`"
               alt="Hotel Image"
               class="w-full h-full object-cover rounded"
             />
@@ -168,6 +168,8 @@ const places = ref(null);
 const routes = ref({});
 const route = useRoute();
 const { t, tm } = useI18n();
+const runtimeConfig = useRuntimeConfig();
+const apiKey = `${runtimeConfig.public.GOOGLE_API_KEY}`;
 
 const loadingSentences = tm("trip.loadingSentences");
 
