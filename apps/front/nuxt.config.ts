@@ -42,6 +42,7 @@ export default defineNuxtConfig({
     detectBrowserLanguage: {
       fallbackLocale: "en",
       useCookie: true,
+      alwaysRedirect: true,
       cookieKey: "nuxt-i18n-locale",
     },
   },
