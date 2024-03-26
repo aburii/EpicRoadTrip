@@ -34,6 +34,7 @@
     "gsap": "^3.12.5",
     "pinia": "^2.1.7",
     "v-calendar": "next",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "@roadtrip/google-api": "*"
   }
 }

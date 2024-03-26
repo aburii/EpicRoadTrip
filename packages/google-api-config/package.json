@@ -1,0 +1,10 @@
+{
+  "name": "@roadtrip/google-api",
+  "version": "1.0.0",
+  "description": "Google places & directions API",
+  "main": "index.ts",
+  "private": true,
+  "files": [
+    "index.ts"
+  ]
+}
