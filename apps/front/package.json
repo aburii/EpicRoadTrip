@@ -35,6 +35,7 @@
     "pinia": "^2.1.7",
     "v-calendar": "next",
     "zod": "^3.22.4",
-    "@roadtrip/google-api": "*"
+    "@roadtrip/google-api": "*",
+    "vue3-google-map": "^0.20.0"
   }
 }

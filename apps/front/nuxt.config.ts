@@ -65,6 +65,7 @@ export default defineNuxtConfig({
     public: {
       SUPABASE_KEY: process.env.NUXT_PUBLIC_SUPABASE_KEY,
       SUPABASE_URL: process.env.NUXT_PUBLIC_SUPABASE_URL,
+      GOOGLE_API_KEY: process.env.NUXT_PUBLIC_GOOGLE_API_KEY,
     },
   },
 });
