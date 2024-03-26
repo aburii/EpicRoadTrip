@@ -10,7 +10,7 @@ type QueryType = {
 export default defineEventHandler(async (event): Promise<PlacesRes> => {
   const config = useRuntimeConfig(event);
   const query: QueryType = getQuery(event);
-  const data: PlacesRes = await $fetch(placesUrl, {
+  return await $fetch(placesUrl, {
     method: "GET",
     query: {
       location: `${query.location_lat},${query.location_long}`,
@@ -19,5 +19,4 @@ export default defineEventHandler(async (event): Promise<PlacesRes> => {
       key: config.googleApiKey,
     },
   });
-  return data;
 });
