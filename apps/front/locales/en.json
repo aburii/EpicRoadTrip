@@ -20,6 +20,40 @@
       "cta": "Travel !"
     }
   },
+  "trip": {
+    "recap": {
+      "1": "Your trip",
+      "2": "from",
+      "3": "to",
+      "4": "from",
+      "5": "to"
+    },
+    "types": {
+      "all": "all",
+      "hotel": "hotels",
+      "restaurant": "restaurants",
+      "activity": "activities",
+      "bar": "bars"
+    },
+    "res": "results",
+    "avlb": " available",
+    "info": "More info",
+    "addTooltip": "add to roadtrip",
+    "start": "Start",
+    "stop": "Stop",
+    "loadingSentences": [
+      "We're preparing your trip!",
+      "We're looking for the best hotels!",
+      "We're looking for the best activities!",
+      "We're looking for the best bars!",
+      "We're looking for the best restaurants!",
+      "We're almost there!",
+      "We're making sure everything is perfect!",
+      "We're are creating the best experience for you!",
+      "We're making sure you have the best trip!",
+      "We're building your dream trip!"
+    ]
+  },
   "footer": {
     "copyrights": "All rights reserved.",
     "termsOfUse": "Terms of use",
