@@ -29,7 +29,7 @@ const prices = ["$", "$$", "$$$", "$$$$"];
 const schema = z.object({
   departure: z.string(),
   arrival: z.string(),
-  price: z.string(),
+  price: z.string().optional(),
   range: z.object({ start: z.date(), end: z.date() }),
 });
 
