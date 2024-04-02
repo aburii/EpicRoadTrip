@@ -45,8 +45,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   await navigateTo({
     path: localePath("/trip"),
     query: {
-      departure: event.data.departure,
-      arrival: event.data.arrival,
+      departure: event.data.departure.name,
+      arrival: event.data.arrival.name,
       price: event.data.price,
       d_start: format(event.data.range.start, "MM/dd/yyyy"),
       d_end: format(event.data.range.end, "MM/dd/yyyy"),

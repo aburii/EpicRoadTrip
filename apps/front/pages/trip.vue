@@ -61,7 +61,7 @@
             <div class="flex justify-between">
               <div class="flex justify-between gap-2">
                 <img
-                  :src="`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${item.imgRef}&key=AIzaSyBpBbVCllSAnRoSgHV2QcWdGPHfc8S2mJI`"
+                  :src="`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${item.imgRef}&key=${apiKey}`"
                   alt="Hotel Image"
                   class="w-20 h-20 lg:w-32 lg:h-32 object-cover rounded"
                 />
