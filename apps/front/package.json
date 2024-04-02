@@ -29,12 +29,12 @@
   "dependencies": {
     "@nuxt/ui": "^2.15.0",
     "@pinia/nuxt": "^0.5.1",
+    "@roadtrip/google-api": "workspace:*",
     "@supabase/supabase-js": "^2.39.8",
     "date-fns": "^3.6.0",
     "gsap": "^3.12.5",
     "pinia": "^2.1.7",
     "v-calendar": "next",
-    "zod": "^3.22.4",
-    "@roadtrip/google-api": "workspace:*"
+    "zod": "^3.22.4"
   }
 }

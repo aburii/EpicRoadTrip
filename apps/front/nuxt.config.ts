@@ -5,21 +5,15 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: "Lana",
+      title: 'Lana',
     },
     pageTransition: {
-      name: "fade",
-      mode: "out-in",
+      name: 'fade',
+      mode: 'out-in',
     },
   },
 
-  modules: [
-    "@nuxt/ui",
-    "@vueuse/nuxt",
-    "@nuxt/fonts",
-    "@nuxtjs/i18n",
-    "@pinia/nuxt",
-  ],
+  modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxt/fonts', '@nuxtjs/i18n', '@pinia/nuxt'],
 
   fonts: {
     experimental: {
@@ -28,32 +22,32 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    vueI18n: "./i18n.config.ts",
+    vueI18n: './i18n.config.ts',
     locales: [
       {
-        code: "en",
-        name: "English",
+        code: 'en',
+        name: 'English',
       },
       {
-        code: "fr",
-        name: "Français",
+        code: 'fr',
+        name: 'Français',
       },
     ],
     detectBrowserLanguage: {
-      fallbackLocale: "en",
+      fallbackLocale: 'en',
       useCookie: true,
       alwaysRedirect: true,
-      cookieKey: "nuxt-i18n-locale",
+      cookieKey: 'nuxt-i18n-locale',
     },
   },
 
   nitro: {},
 
   colorMode: {
-    preference: "light",
+    preference: 'light',
   },
 
-  css: ["~/assets/main.css"],
+  css: ['~/assets/main.css'],
 
   typescript: {
     strict: true,

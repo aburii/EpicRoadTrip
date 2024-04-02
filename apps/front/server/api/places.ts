@@ -1,4 +1,4 @@
-import { PlacesRes, placesUrl } from "@roadtrip/google-api";
+import { PlacesRes, placesUrl } from '@roadtrip/google-api';
 
 type QueryType = {
   location_lat: string;
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event): Promise<PlacesRes> => {
   const config = useRuntimeConfig(event);
   const query: QueryType = getQuery(event);
   return await $fetch(placesUrl, {
-    method: "GET",
+    method: 'GET',
     query: {
       location: `${query.location_lat},${query.location_long}`,
       type: query.type,

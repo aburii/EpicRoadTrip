@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { type Duration, format, isSameDay, add } from "date-fns";
-import type { DatePickerRange } from "~/types/date-picker";
+import { type Duration, format, isSameDay, add } from 'date-fns';
+import type { DatePickerRange } from '~/types/date-picker';
 
 defineProps<{
   innerStyle: string;
@@ -40,14 +40,12 @@ function selectRange(duration: Duration) {
         },
       }"
     >
-      {{ format(selected.start, "d MMM, yyy") }} -
-      {{ format(selected.end, "d MMM, yyy") }}
+      {{ format(selected.start, 'd MMM, yyy') }} -
+      {{ format(selected.end, 'd MMM, yyy') }}
     </UButton>
 
     <template #panel="{ close }">
-      <div
-        class="flex items-center sm:divide-x font- divide-gray-200 dark:divide-gray-800"
-      >
+      <div class="flex items-center sm:divide-x font- divide-gray-200 dark:divide-gray-800">
         <div class="hidden sm:flex flex-col py-4">
           <UButton
             v-for="(range, index) in ranges"

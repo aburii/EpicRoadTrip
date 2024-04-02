@@ -1,4 +1,4 @@
-import type { User } from "@supabase/supabase-js";
+import type { User } from '@supabase/supabase-js';
 
 export default function useSupabaseAuth() {
   const { $supabase } = useNuxtApp();
@@ -13,7 +13,7 @@ export default function useSupabaseAuth() {
   const signInWithGoogle = async () => {
     loading.value = true;
     const { data, error } = await $supabase.auth.signInWithOAuth({
-      provider: "google",
+      provider: 'google',
     });
     loading.value = false;
 
@@ -28,7 +28,7 @@ export default function useSupabaseAuth() {
     });
 
     if (!error) {
-      await navigateTo("/");
+      await navigateTo('/');
     }
 
     loading.value = false;
@@ -39,7 +39,7 @@ export default function useSupabaseAuth() {
     loading.value = true;
     const { data, error } = await $supabase.auth.signUp({ email, password });
     if (!error) {
-      await navigateTo("/demoLogin");
+      await navigateTo('/demoLogin');
     }
     loading.value = false;
     return { data, error };

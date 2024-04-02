@@ -1,11 +1,6 @@
 {
   "travelPrefix": "Où voulez-vous",
-  "travelKeywords": [
-    "rider la puff ?",
-    "kiffer votre vie ?",
-    "faire un roadtrip ?",
-    "voyager ?"
-  ],
+  "travelKeywords": ["rider la puff ?", "kiffer votre vie ?", "faire un roadtrip ?", "voyager ?"],
   "datePicker": {
     "ranges": {
       "oneDay": "1 jour",

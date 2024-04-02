@@ -1,4 +1,4 @@
-import { autocompleteUrl } from "@roadtrip/google-api";
+import { autocompleteUrl } from '@roadtrip/google-api';
 
 type AutocompleteReturnValue = {
   predictions: { description: string; place_id: string }[];
@@ -11,23 +11,23 @@ export default defineEventHandler(async (event) => {
   if (!input) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Missing input query parameter",
+      statusMessage: 'Missing input query parameter',
     });
   }
 
   if (!lang) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Missing lang query parameter",
+      statusMessage: 'Missing lang query parameter',
     });
   }
 
   const result: AutocompleteReturnValue = await $fetch(autocompleteUrl, {
-    method: "GET",
+    method: 'GET',
     query: {
       input,
       language: lang,
-      types: "(cities)",
+      types: '(cities)',
       key,
     },
   });
