@@ -9,7 +9,9 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "turbo": "latest"
+    "turbo": "latest",
+    "typescript": "5.3.3"
+
   },
   "engines": {
     "node": ">=18"
@@ -18,8 +20,5 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "zod": "^3.22.4"
-  }
+  ]
 }
