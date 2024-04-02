@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const { data } = useFetch("/api/places", {
+const { data } = useFetch('/api/places', {
   query: {
-    location_lat: "-33.8670522",
-    location_long: "151.1957362",
-    type: "restaurant",
+    location_lat: '-33.8670522',
+    location_long: '151.1957362',
+    type: 'restaurant',
     radius: 50000,
   },
 });

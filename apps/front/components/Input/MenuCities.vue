@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 defineProps<{
   placeholder: string;
-  size: "sm" | "md" | "lg" | "xl";
+  size: 'sm' | 'md' | 'lg' | 'xl';
 }>();
 
 const country = defineModel<{ id: string; name: string }>();
-const query = ref("");
+const query = ref('');
 const loading = ref(false);
 const { locale } = useI18n();
-const { data: suggestions, execute } = await useFetch("/api/autocomplete", {
+const { data: suggestions, execute } = await useFetch('/api/autocomplete', {
   query: { input: query, lang: locale },
   immediate: false,
   watch: false,

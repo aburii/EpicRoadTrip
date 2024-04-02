@@ -1,11 +1,6 @@
 {
   "travelPrefix": "Where do you want",
-  "travelKeywords": [
-    "to travel ?",
-    "to have a good time?",
-    "to roadtrip?",
-    "dream ?"
-  ],
+  "travelKeywords": ["to travel ?", "to have a good time?", "to roadtrip?", "dream ?"],
   "datePicker": {
     "ranges": {
       "oneDay": "1 day",

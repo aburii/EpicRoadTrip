@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
 
 export default defineNuxtPlugin(() => {
   const runtimeConfig = useRuntimeConfig();
@@ -6,7 +6,7 @@ export default defineNuxtPlugin(() => {
   const supabaseUrl = `${runtimeConfig.public.SUPABASE_URL}`;
 
   if (!supabaseUrl || !supabaseKey) {
-    throw new Error("Supabase URL or key is missing");
+    throw new Error('Supabase URL or key is missing');
   }
 
   const supabase = createClient(supabaseUrl, supabaseKey);

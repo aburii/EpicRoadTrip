@@ -9,15 +9,12 @@
 
 <script lang="ts" setup>
 const { signUpWithEmail } = useSupabaseAuth();
-const email = ref<string>("");
-const password = ref<string>("");
+const email = ref<string>('');
+const password = ref<string>('');
 const error = ref<string | null>(null);
 
 const register = async () => {
-  const { error: signInError } = await signUpWithEmail(
-    email.value,
-    password.value,
-  );
+  const { error: signInError } = await signUpWithEmail(email.value, password.value);
   error.value = signInError?.message || null;
 };
 </script>

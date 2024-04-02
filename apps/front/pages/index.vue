@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { add } from "date-fns";
-import { z } from "zod";
-import type { FormSubmitEvent } from "#ui/types";
-import AppTextWriter from "~/components/AppTextWriter.vue";
+import { add } from 'date-fns';
+import { z } from 'zod';
+import type { FormSubmitEvent } from '#ui/types';
+import AppTextWriter from '~/components/AppTextWriter.vue';
 
 definePageMeta({
-  layout: "landing",
+  layout: 'landing',
 });
 
 const { t, tm } = useI18n();
 
-const travelSentences = tm("travelKeywords");
+const travelSentences = tm('travelKeywords');
 
 const ranges = [
-  { label: t("datePicker.ranges.oneDay"), duration: { days: 1 } },
-  { label: t("datePicker.ranges.oneDay"), duration: { days: 7 } },
-  { label: t("datePicker.ranges.oneDay"), duration: { days: 14 } },
-  { label: t("datePicker.ranges.oneDay"), duration: { months: 1 } },
-  { label: t("datePicker.ranges.oneDay"), duration: { months: 3 } },
-  { label: t("datePicker.ranges.oneDay"), duration: { months: 6 } },
-  { label: t("datePicker.ranges.oneDay"), duration: { years: 1 } },
+  { label: t('datePicker.ranges.oneDay'), duration: { days: 1 } },
+  { label: t('datePicker.ranges.oneDay'), duration: { days: 7 } },
+  { label: t('datePicker.ranges.oneDay'), duration: { days: 14 } },
+  { label: t('datePicker.ranges.oneDay'), duration: { months: 1 } },
+  { label: t('datePicker.ranges.oneDay'), duration: { months: 3 } },
+  { label: t('datePicker.ranges.oneDay'), duration: { months: 6 } },
+  { label: t('datePicker.ranges.oneDay'), duration: { years: 1 } },
 ];
 
-const prices = ["$", "$$", "$$$", "$$$$"];
+const prices = ['$', '$$', '$$$', '$$$$'];
 
 const schema = z.object({
   departure: z.object({ id: z.string(), name: z.string() }),
@@ -56,7 +56,7 @@ const invertDestinations = () => {
   <section class="flex h-full w-full md:items-center justify-normal">
     <section class="md:h-1/3 h-full w-full px-[10px] flex flex-col">
       <h2 class="md:text-5xl text-4xl font-bold leading-snug">
-        {{ t("travelPrefix") }}
+        {{ t('travelPrefix') }}
         <AppTextWriter
           id="travelSentence"
           :duration="1"
@@ -82,9 +82,7 @@ const invertDestinations = () => {
             />
           </div>
           <div class="lg:flex lg:items-center lg:justify-between">
-            <div
-              class="space-y-7 md:space-x-6 md:space-y-0 mt-7 md:flex md:items-center md:mt-0"
-            >
+            <div class="space-y-7 md:space-x-6 md:space-y-0 mt-7 md:flex md:items-center md:mt-0">
               <InputMenuCities
                 v-model="state.departure"
                 :placeholder="t('landing.form.departure')"

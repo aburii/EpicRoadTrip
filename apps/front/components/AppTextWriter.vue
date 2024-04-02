@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { gsap } from "gsap";
+import { gsap } from 'gsap';
 
 const props = defineProps<{
   id: string;
@@ -22,9 +22,7 @@ const gsapTextInterval = useIntervalFn(
 
     tl.to(`#${props.id}`, {
       duration: 1,
-      text: props.sentences[
-        randomIntFromInterval(0, props.sentences.length - 1)
-      ],
+      text: props.sentences[randomIntFromInterval(0, props.sentences.length - 1)],
     });
   },
   2000,
@@ -35,7 +33,7 @@ const gsapTextInterval = useIntervalFn(
 );
 
 onMounted(() => {
-  gsap.defaults({ ease: "none" });
+  gsap.defaults({ ease: 'none' });
   gsapTextInterval.resume();
 });
 </script>
