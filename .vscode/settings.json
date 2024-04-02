@@ -1,5 +1,8 @@
 {
-    "terminal.integrated.automationProfile.linux": {
-        
-    }
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
