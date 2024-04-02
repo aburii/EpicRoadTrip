@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { add, format } from "date-fns";
-import { z } from "zod";
-import type { FormSubmitEvent } from "#ui/types";
-import AppTextWriter from "~/components/AppTextWriter.vue";
+import { add, format } from 'date-fns';
+import { z } from 'zod';
+import type { FormSubmitEvent } from '#ui/types';
+import AppTextWriter from '~/components/AppTextWriter.vue';
 
 definePageMeta({
   layout: 'landing',
@@ -43,16 +43,15 @@ const state = reactive({
 const localePath = useLocalePath();
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   await navigateTo({
-    path: localePath("/trip"),
+    path: localePath('/trip'),
     query: {
       departure: event.data.departure.name,
       arrival: event.data.arrival.name,
       price: event.data.price,
-      d_start: format(event.data.range.start, "MM/dd/yyyy"),
-      d_end: format(event.data.range.end, "MM/dd/yyyy"),
+      d_start: format(event.data.range.start, 'MM/dd/yyyy'),
+      d_end: format(event.data.range.end, 'MM/dd/yyyy'),
     },
   });
-  console.log(event.data);
 }
 
 const invertDestinations = () => {

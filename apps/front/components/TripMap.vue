@@ -12,6 +12,16 @@
     >
       <Marker :options="markerStart" />
       <Marker :options="markerEnd" />
+      <Marker
+        v-for="(route, index) in props.routes.slice(1, -1)"
+        :key="index"
+        :options="{
+          position: { lat: route.lat, lng: route.long },
+          icon: markerIcon,
+          label: { text: (index + 1).toString(), color: 'white' },
+          title: route.name,
+        }"
+      />
       <Polyline :options="tripPath" />
     </GoogleMap>
   </div>
@@ -19,6 +29,7 @@
 
 <script setup lang="ts">
 import { GoogleMap, Marker, Polyline } from "vue3-google-map";
+import { decode } from '@mapbox/polyline';
 
 const { t } = useI18n();
 
@@ -46,10 +57,11 @@ const center = reactive({
 });
 
 const tripCoordinates = reactive(
-  props.routes.map((route) => ({
-    lat: route.lat,
-    lng: route.long,
-  })),
+  props.routes.flatMap((route) =>
+    route.steps.flatMap((step) => 
+      decode(step.polyline).map(([lat, lng]) => ({ lat, lng }))
+    ),
+  ),
 );
 
 const markerIcon = {
