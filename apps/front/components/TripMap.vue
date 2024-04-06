@@ -34,7 +34,7 @@ import { decode } from '@mapbox/polyline';
 const { t } = useI18n();
 
 const runtimeConfig = useRuntimeConfig();
-const apiKey = `${runtimeConfig.public.GOOGLE_API_KEY}`;
+const apiKey = runtimeConfig.public.GOOGLE_API_KEY;
 
 const props = defineProps({
   routes: {
