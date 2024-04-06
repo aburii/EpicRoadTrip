@@ -44,7 +44,7 @@
         </div>
         <UTabs v-if="!collasped" :items="items" />
       </div>
-      <transition
+      <Transition
         enter-active-class="transition ease-out duration-300"
         enter-class="opacity-0"
         enter-to-class="opacity-100"
@@ -99,7 +99,7 @@
             </div>
           </UCard>
         </div>
-      </transition>
+      </Transition>
       <div v-if="!collasped" class="sticky bottom-0 flex flex-col items-center z-20 text-center">
         <p class="text-xs lg:text-sm">
           <span class="font-bold">{{ nmbrResults }} {{ t('trip.res') }} </span
@@ -108,7 +108,7 @@
       </div>
     </div>
     <!-- DRAWER -->
-    <transition
+    <Transition
       enter-active-class="transition ease-out duration-300"
       enter-class="transform -translate-x-full"
       enter-to-class="transform translate-x-0"
@@ -172,7 +172,7 @@
           </UCard>
         </div>
       </div>
-    </transition>
+    </Transition>
     <div class="absolute bottom-0 left-0 right-0">
       <UProgress v-if="waypointLoading" animation="carousel" />
     </div>
