@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!loading" class="relative w-screen h-screen">
+  <TripLoading v-if="loading" />
+  <div v-else class="relative w-screen h-screen">
     <TripMap class="absolute z-0" :routes="routes" />
     <div
       class="absolute bottom-0 lg:top-0 left-0 right-0 lg:w-1/3 p-2 lg:p-12 lg:m-6 z-10 flex flex-col"
@@ -129,7 +130,10 @@
         ></UButton>
         <div class="relative grid grid-cols-1 gap-4 mt-6">
           <UCard>
-            <div class="flex flex-col justify-center items-center">
+            <div class="flex flex-col justify-center items-center mx-2">
+              <h2 class="text-xs lg:text-xl text-primary">
+                {{ selectedItem?.name }}
+              </h2>
               <vue3StarRatings
                 v-if="selectedItem?.rating"
                 v-model="selectedItem.rating"
@@ -139,15 +143,12 @@
                 :number-of-stars="5"
                 :disable-click="true"
               />
-              <h2 class="text-sm lg:text-2xl text-primary">
-                {{ selectedItem?.name }}
-              </h2>
-              <h2 class="text-sm lg:text-xl text-secondary">
+              <span class="text-secondary">
                 {{ selectedItem?.formatted_address }}
-              </h2>
-              <h2 class="text-xs lg:text-xl text-secondary">
+              </span>
+              <span class="text-secondary">
                 {{ selectedItem?.international_phone_number }}
-              </h2>
+              </span>
               <UButton
                 :to="selectedItem?.website"
                 target="_blank"
@@ -165,9 +166,9 @@
           </UCard>
           <UCard v-if="selectedItem?.editorial_summary">
             <div>
-              <h2 class="text-xs lg:text-xl">
+              <span>
                 {{ selectedItem?.editorial_summary.overview }}
-              </h2>
+              </span>
             </div>
           </UCard>
         </div>
@@ -177,27 +178,30 @@
       <UProgress v-if="waypointLoading" animation="carousel" />
     </div>
   </div>
-  <div v-else class="flex items-center justify-center bg-white h-screen w-screen relative">
-    <img
-      src="https://i.pinimg.com/originals/43/3b/6c/433b6c5336c72a21bcfd9db8d831562a.gif"
-      alt="Loading"
-    />
-    <h2
-      class="absolute inset-0 flex items-center justify-center text-xl lg:text-2xl top-1/3 text-center mx-8"
-    >
-      <AppTextWriter
-        id="loadingSentences"
-        :duration="0.5"
-        :sentences="loadingSentences"
-        :interval="1000"
-      />
-    </h2>
-  </div>
 </template>
 
 <script setup lang="ts">
 import vue3StarRatings from 'vue3-star-ratings';
 import { z } from 'zod';
+
+definePageMeta({
+  layout: 'trip',
+});
+
+const route = useRoute();
+const query = {
+  origin: route.query.departure,
+  destination: route.query.arrival,
+  ...(route.query.waypoints ? { waypoints: route.query.waypoints } : {}),
+};
+const {
+  data: fetchedData,
+  error,
+  execute,
+} = await useFetch('/api/call', {
+  immediate: false,
+  query,
+});
 
 const PlaceSchema = z.object({
   imgRef: z.string(),
@@ -238,20 +242,23 @@ const DataSchema = z.object({
   routes: z.array(RouteSchema),
 });
 
-const nmbrResults = ref<number>(null);
 const loading = ref(true);
+const toast = useToast();
+const nmbrResults = ref<number>(0);
 const waypointLoading = ref(false);
 const collasped = ref(false);
 const drawerOpen = ref(false);
 const selectedItem = ref(null);
 const places = ref<Array<z.infer<typeof PlaceSchema>>>([]);
-const routes = ref<z.infer<typeof RouteSchema>>({});
-const route = useRoute();
-const { t, tm } = useI18n();
+const routes = ref<z.infer<typeof RouteSchema>>({
+  name: '',
+  lat: 0,
+  long: 0,
+  steps: [],
+});
+const { t } = useI18n();
 const runtimeConfig = useRuntimeConfig();
 const apiKey = `${runtimeConfig.public.GOOGLE_API_KEY}`;
-
-const loadingSentences = tm('trip.loadingSentences');
 
 const items = [
   {
@@ -271,14 +278,13 @@ const items = [
   },
 ];
 
-function showDrawer(item) {
+function showDrawer(item: typeof PlaceSchema) {
   selectedItem.value = item;
   drawerOpen.value = true;
 }
 
-async function addWaypoint(item) {
+async function addWaypoint(item: { formatted_address: any }) {
   waypointLoading.value = true;
-  console.log(waypointLoading.value);
   const waypoint = route.query.waypoints
     ? `${route.query.waypoints}|${item.formatted_address}`
     : item.formatted_address;
@@ -292,6 +298,9 @@ async function addWaypoint(item) {
       waypoints: waypoint,
     },
   });
+  query.origin = route.query.departure;
+  query.destination = route.query.arrival;
+  query.waypoints = route.query.waypoints ? route.query.waypoints : {};
   fetchData();
 }
 
@@ -300,18 +309,10 @@ function openClose() {
 }
 
 async function fetchData() {
-  const query = {
-    origin: route.query.departure,
-    destination: route.query.arrival,
-    ...(route.query.waypoints ? { waypoints: route.query.waypoints } : {}),
-  };
-  const { data: fetchedData, error } = await useFetch('/api/call', {
-    query,
-    immediate: true,
-    watch: false,
-  });
-  if (error.value) {
-    console.error('Failed to fetch data:', error.value);
+  await execute();
+
+  if (!fetchedData || error.value) {
+    toast.add({ title: 'Failed to fetch data' });
   } else {
     const validatedData = DataSchema.parse(fetchedData.value);
     places.value = validatedData.places;

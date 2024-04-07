@@ -13,7 +13,7 @@
       <Marker :options="markerStart" />
       <Marker :options="markerEnd" />
       <Marker
-        v-for="(route, index) in props.routes.slice(1, -1)"
+        v-for="(route, index) in slicedRoutes"
         :key="index"
         :options="{
           position: { lat: route.lat, lng: route.long },
@@ -30,18 +30,40 @@
 <script setup lang="ts">
 import { GoogleMap, Marker, Polyline } from "vue3-google-map";
 import { decode } from '@mapbox/polyline';
+import { z } from 'zod';
 
 const { t } = useI18n();
 
 const runtimeConfig = useRuntimeConfig();
 const apiKey = runtimeConfig.public.GOOGLE_API_KEY;
 
+const StepSchema = z.object({
+  start_location: z.object({
+    lat: z.number(),
+    lng: z.number(),
+  }),
+  end_location: z.object({
+    lat: z.number(),
+    lng: z.number(),
+  }),
+  polyline: z.string(),
+});
+
+const RouteSchema = z.object({
+  name: z.string(),
+  lat: z.number(),
+  long: z.number(),
+  steps: z.array(StepSchema),
+});
+
 const props = defineProps({
   routes: {
-    type: Object,
-    default: () => ({}),
+    type: Array as PropType<z.infer<typeof RouteSchema>[]>,
+    default: () => ([]),
   },
 });
+
+const slicedRoutes = computed(() => props.routes.slice(1, -1));
 
 const startPoint = reactive({
   lat: props.routes[0].lat,
