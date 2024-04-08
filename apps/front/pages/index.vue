@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { add } from 'date-fns';
+import { add, format } from 'date-fns';
 import { z } from 'zod';
 import type { FormSubmitEvent } from '#ui/types';
 import AppTextWriter from '~/components/AppTextWriter.vue';
@@ -40,8 +40,18 @@ const state = reactive({
   range: { start: new Date(), end: add(new Date(), { days: 14 }) },
 });
 
-function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log(event.data);
+const localePath = useLocalePath();
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  await navigateTo({
+    path: localePath('/trip'),
+    query: {
+      departure: event.data.departure.name,
+      arrival: event.data.arrival.name,
+      price: event.data.price,
+      d_start: format(event.data.range.start, 'MM/dd/yyyy'),
+      d_end: format(event.data.range.end, 'MM/dd/yyyy'),
+    },
+  });
 }
 
 const invertDestinations = () => {

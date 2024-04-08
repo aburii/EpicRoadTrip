@@ -20,6 +20,38 @@
       "cta": "Voyager !"
     }
   },
+  "trip": {
+    "recap": {
+      "1": "Votre voyage",
+      "2": "de",
+      "3": "à",
+      "4": "du",
+      "5": "au"
+    },
+    "types": {
+      "all": "tout",
+      "hotel": "hotels",
+      "restaurant": "restaurants",
+      "activity": "activités",
+      "bar": "bars"
+    },
+    "res": "résultats",
+    "avlb": " disponibles",
+    "info": "Plus d'informations",
+    "addTooltip": "ajouter au roadtrip",
+    "start": "Début",
+    "stop": "Fin",
+    "loadingSentences": [
+      "Nous preparons votre voyage!",
+      "Nous cherchons les meilleurs hotels!",
+      "Nous cherchons les meilleurs bars!",
+      "Nous cherchons les meilleurs restaurants!",
+      "Nous cherchons les meilleures activités!",
+      "Nous y sommes presque!",
+      "Nous faisons en sorte que vous ayez le meilleur voyage!",
+      "Nous vous construisons le voyage de vos rêves!"
+    ]
+  },
   "footer": {
     "copyrights": "Tous droits réservés.",
     "termsOfUse": "Conditions d'utilisation",
