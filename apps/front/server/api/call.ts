@@ -1,11 +1,4 @@
-import {
-  DirectionsRes,
-  directionsUrl,
-  PlacesRes,
-  placesUrl,
-  placeDetailsUrl,
-  PlacesDetailsRes,
-} from '@roadtrip/google-api';
+import { DirectionsRes, directionsUrl, PlacesRes, placesUrl } from '@roadtrip/google-api';
 
 type QueryType = {
   places_type?: 'restaurant' | 'hotel' | 'activity' | 'bar';
@@ -41,10 +34,7 @@ type PlaceType = {
   isOpen: boolean;
   price_level: number;
   types: string[];
-  website?: string;
   formatted_address?: string;
-  international_phone_number?: string;
-  editorial_summary: string[];
 };
 
 export default defineEventHandler(async (event) => {
@@ -106,13 +96,6 @@ export default defineEventHandler(async (event) => {
     });
     for (let j = 0; j < place.results.length; j++) {
       const result = place.results[j];
-      const placeDetails: PlacesDetailsRes = await $fetch(placeDetailsUrl, {
-        method: 'GET',
-        query: {
-          place_id: result.place_id,
-          key: config.googleApiKey,
-        },
-      });
       places.push({
         name: result.name,
         lat: result.geometry.location.lat,
@@ -122,10 +105,7 @@ export default defineEventHandler(async (event) => {
         imgRef: result.photos ? result.photos[0].photo_reference : '',
         price_level: result.price_level as number,
         types: result.types,
-        formatted_address: placeDetails.result.formatted_address,
-        international_phone_number: placeDetails.result.international_phone_number,
-        editorial_summary: placeDetails.result.editorial_summary,
-        website: placeDetails.result.website,
+        formatted_address: result.vicinity,
       });
     }
   }
