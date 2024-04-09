@@ -1,7 +1,7 @@
 import { DirectionsRes, directionsUrl, PlacesRes, placesUrl } from '@roadtrip/google-api';
 
 type QueryType = {
-  places_type?: 'restaurant' | 'hotel' | 'activity' | 'bar';
+  places_type?: 'lodging' | 'museum' | 'restaurant';
   origin: string;
   destination: string;
   waypoints?: string;
@@ -65,6 +65,11 @@ export default defineEventHandler(async (event) => {
     };
   }
 
+  let roadDistance = 0;
+  directions?.routes[0].legs.forEach((leg) => {
+    roadDistance += leg.distance.value / 1000;
+  });
+
   directions?.routes[0]?.legs.forEach((leg) => {
     const steps = leg.steps.map((step) => ({
       distance: Math.round(step.distance.value / 1000),
@@ -99,7 +104,7 @@ export default defineEventHandler(async (event) => {
   );
   for (let i = 0; i < allSteps.length; i++) {
     let sum = 0;
-    if (allSteps[i].distance + sum > 100) {
+    if (allSteps[i].distance + sum >= roadDistance / 10) {
       placesSteps.push(allSteps[i]);
       sum = 0;
     }
@@ -115,9 +120,9 @@ export default defineEventHandler(async (event) => {
     const placesFetched: PlacesRes = await $fetch(placesUrl, {
       method: 'GET',
       query: {
-        location: `${placesStep.start_location.lat},${placesStep.start_location.lng}`,
-        type: query.places_type,
-        radius: 1000,
+        location: `${i % 2 === 0 ? placesStep.start_location.lat : placesStep.end_location.lat},${i % 2 === 0 ? placesStep.start_location.lng : placesStep.end_location.lng}`,
+        type: 'museum',
+        radius: 10000,
         key: config.googleApiKey,
       },
     });
