@@ -9,20 +9,23 @@ type QueryType = {
   date_end?: Date;
 };
 
+type StepType = {
+  distance: number;
+  start_location: {
+    lat: number;
+    lng: number;
+  };
+  end_location: {
+    lat: number;
+    lng: number;
+  };
+};
+
 type RouteType = {
   name: string;
   lat: number;
   long: number;
-  steps: {
-    start_location: {
-      lat: number;
-      lng: number;
-    };
-    end_location: {
-      lat: number;
-      lng: number;
-    };
-  }[];
+  steps: StepType[];
 };
 
 type PlaceType = {
@@ -53,8 +56,18 @@ export default defineEventHandler(async (event) => {
       optimize: true,
     },
   });
-  directions?.routes[0].legs.forEach((leg) => {
+
+  if (directions.status !== 'OK') {
+    return {
+      status: directions.status,
+      routes,
+      places,
+    };
+  }
+
+  directions?.routes[0]?.legs.forEach((leg) => {
     const steps = leg.steps.map((step) => ({
+      distance: Math.round(step.distance.value / 1000),
       start_location: {
         lat: step.start_location.lat,
         lng: step.start_location.lng,
@@ -79,23 +92,37 @@ export default defineEventHandler(async (event) => {
     });
   });
 
+  const placesSteps: StepType[] = [];
+  const allSteps: StepType[] = routes.reduce<StepType[]>(
+    (acc, route) => acc.concat(route.steps),
+    [],
+  );
+  for (let i = 0; i < allSteps.length; i++) {
+    let sum = 0;
+    if (allSteps[i].distance + sum > 100) {
+      placesSteps.push(allSteps[i]);
+      sum = 0;
+    }
+    sum += allSteps[i].distance;
+  }
+
   const lastRoute = routes[routes.length - 1];
   routes = routes.filter((route) => route.steps.length > 0);
   routes.push(lastRoute);
 
-  for (let i = 0; i < routes.length; i++) {
-    const route = routes[i];
-    const place: PlacesRes = await $fetch(placesUrl, {
+  for (let i = 0; i < placesSteps.length; i++) {
+    const placesStep = placesSteps[i];
+    const placesFetched: PlacesRes = await $fetch(placesUrl, {
       method: 'GET',
       query: {
-        location: `${route.lat},${route.long}`,
+        location: `${placesStep.start_location.lat},${placesStep.start_location.lng}`,
         type: query.places_type,
         radius: 1000,
         key: config.googleApiKey,
       },
     });
-    for (let j = 0; j < place.results.length; j++) {
-      const result = place.results[j];
+    for (let j = 0; j < placesFetched.results.length; j++) {
+      const result = placesFetched.results[j];
       places.push({
         name: result.name,
         lat: result.geometry.location.lat,
@@ -116,21 +143,3 @@ export default defineEventHandler(async (event) => {
     places,
   };
 });
-
-/*
-# QUERY
-
-- places_type : "restaurant" | "Hotel" | "activity" | "Bar"
-- origin : string
-- destination : string
-- waypoints : string[]
-- date_debut : string
-- date_fin : string
-
-# RESPONSE
-
-- status : "OK" | "ZERO_RESULTS" | "OVER_QUERY_LIMIT" | "REQUEST_DENIED" | "INVALID_REQUEST" | "UNKNOWN_ERROR"
-- routes: Route[]
-- places: Place[]
-
-*/
