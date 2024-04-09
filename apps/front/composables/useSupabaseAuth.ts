@@ -26,11 +26,6 @@ export default function useSupabaseAuth() {
       email,
       password,
     });
-
-    if (!error) {
-      await navigateTo('/');
-    }
-
     loading.value = false;
     return { data, error };
   };
@@ -38,9 +33,6 @@ export default function useSupabaseAuth() {
   const signUpWithEmail = async (email: string, password: string) => {
     loading.value = true;
     const { data, error } = await $supabase.auth.signUp({ email, password });
-    if (!error) {
-      await navigateTo('/demoLogin');
-    }
     loading.value = false;
     return { data, error };
   };
