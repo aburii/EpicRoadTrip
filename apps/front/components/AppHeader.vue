@@ -2,6 +2,7 @@
 import type { DropdownItem } from '#ui/types';
 
 const i18n = useI18n();
+const { t } = i18n;
 const { locales } = i18n;
 const supabase = useSupabaseAuth();
 const { signOut, user } = supabase;
@@ -10,7 +11,7 @@ const userLoggedIn = computed(() => !!supabase.user.value);
 const guestDropdownItems: DropdownItem[][] = [
   [
     {
-      label: "S'inscrire",
+      label: t('header.dropdown.register'),
       slot: 'register',
       disabled: userLoggedIn.value,
       labelClass: 'font-bold',
@@ -19,7 +20,7 @@ const guestDropdownItems: DropdownItem[][] = [
   ],
   [
     {
-      label: 'Se connecter',
+      label: t('header.dropdown.login'),
       slot: 'connect',
       disabled: userLoggedIn.value,
       click: openAuthModal,
@@ -27,10 +28,10 @@ const guestDropdownItems: DropdownItem[][] = [
   ],
 ];
 const userDropdownItem: DropdownItem[][] = [
-  [{ label: 'Connecté en tant que', disabled: true, slot: 'account' }],
+  [{ label: t('header.dropdown.logged-as'), disabled: true, slot: 'account' }],
   [
     {
-      label: 'Deconnexion',
+      label: t('header.dropdown.logout'),
       icon: 'i-heroicons-arrow-left-on-rectangle',
       class: 'text-red-500 hover:text-red-600',
       click: async () => {
@@ -39,6 +40,7 @@ const userDropdownItem: DropdownItem[][] = [
     },
   ],
 ];
+
 const authDropdownItems = computed(() => {
   return userLoggedIn.value ? userDropdownItem : guestDropdownItems;
 });

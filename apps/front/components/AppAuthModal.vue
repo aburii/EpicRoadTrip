@@ -3,6 +3,7 @@ import { z } from 'zod';
 import type { FormSubmitEvent } from '#ui/types';
 import type { User } from '~/types/user';
 
+const { t } = useI18n();
 const supabase = useSupabaseAuth();
 const { signInWithGoogle, signUpWithEmail, signInWithEmail } = supabase;
 const toast = useToast();
@@ -16,7 +17,9 @@ const passwordFieldType = ref<'password' | 'text'>('password');
 const confirmFieldType = ref<'password' | 'text'>('password');
 
 const emailFormSchema = z.object({
-  email: z.string().email('Invalid email'),
+  email: z
+    .string({ required_error: t('authModal.errors.invalid-email') })
+    .email(t('authModal.errors.invalid-email')),
 });
 
 type EmailSchema = z.output<typeof emailFormSchema>;
@@ -27,11 +30,13 @@ const emailFormState = reactive({
 
 const passwordFormSchema = z
   .object({
-    password: z.string().min(6, 'Must be 6 length'),
+    password: z
+      .string({ required_error: t('authModal.errors.password-length') })
+      .min(6, t('authModal.errors.password-length', { nb: 6 })),
     passwordConfirm: z.optional(z.string()),
   })
   .refine((data) => !existingUser.value && data.passwordConfirm === data.password, {
-    message: "Passwords don't match",
+    message: t('authModal.errors.confirm-password'),
     path: ['passwordConfirm'],
   });
 
@@ -106,7 +111,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
   }
 
   if (!userEmail.value) {
-    return toast.add({ title: 'Error mail missing', color: 'red' });
+    return toast.add({ title: t('internal-error'), color: 'red' });
   }
 
   if (existingUser.value) {
@@ -116,6 +121,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
       toast.add({ title: error.message, color: 'red' });
     } else {
       open.value = false;
+      toast.add({ title: t('authModal.success-login') });
     }
     loading.value = false;
   } else {
@@ -125,6 +131,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
       toast.add({ title: error.message, color: 'red' });
     } else {
       open.value = false;
+      toast.add({ title: t('authModal.success-login') });
     }
     loading.value = false;
   }
@@ -137,7 +144,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="font-semibold leading-6 text-gray-900 dark:text-white">
-            Connexion ou inscription
+            {{ t('authModal.title') }}
           </h3>
           <UButton
             color="gray"
@@ -152,7 +159,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
 
       <div class="space-y-5 pb-5">
         <div class="space-y-8">
-          <h4 class="text-lg font-bold mt-5">Bienvenue sur Lana.</h4>
+          <h4 class="text-lg font-bold mt-5">{{ t('authModal.welcome') }}</h4>
           <UForm
             v-if="authEmailStep === 'email'"
             :schema="emailFormSchema"
@@ -165,14 +172,14 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
                 v-model="emailFormState.email"
                 class="font-medium"
                 size="xl"
-                placeholder="Adresse e-mail"
+                :placeholder="t('authModal.placeholders.email')"
                 autocomplete
               />
             </UFormGroup>
             <UButton
               :loading="loading"
               size="xl"
-              label="Continuer"
+              :label="t('authModal.buttons.continue')"
               class="w-full text-center"
               padded
               block
@@ -186,21 +193,21 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
             class="space-y-8"
             @submit="onEmailContinue"
           >
-            <div v-if="existingUser" class="flex justify-between">
-              <span>Hello, {{ existingUser.email }}</span>
-              <span class="text-gray-500 text-sm"
-                >Not you ?
+            <div v-if="existingUser" class="flex lg:justify-between flex-col lg:flex-row">
+              <span>{{ t('authModal.hello') }}, {{ existingUser.email }}</span>
+              <span class="text-gray-500 text-sm">
+                {{ t('authModal.not-you') }}
                 <UButton
                   type="button"
                   variant="link"
                   color="gray"
                   class="underline"
-                  label="Go back"
+                  :label="t('authModal.buttons.back')"
                   @click="resetFormsValue"
               /></span>
             </div>
             <div v-else>
-              Registering with : <span class="font-bold">{{ userEmail }}</span>
+              {{ t('authModal.registering-with') }} <span class="font-bold">{{ userEmail }}</span>
             </div>
             <UFormGroup name="password">
               <UInput
@@ -209,7 +216,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
                 class="font-medium"
                 size="xl"
                 autocomplete="off"
-                placeholder="Mot de passe"
+                :placeholder="t('authModal.placeholders.password')"
                 :ui="{ icon: { trailing: { pointer: '' } } }"
               >
                 <template #trailing>
@@ -218,12 +225,11 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
                     :icon="
                       passwordFieldType !== 'password' ? 'i-heroicons-eye' : 'i-heroicons-eye-slash'
                     "
-                    class=""
                     variant="ghost"
                     color="black"
                     block
                     @click="togglePasswordVisible"
-                  ></UButton>
+                  />
                 </template>
               </UInput>
             </UFormGroup>
@@ -235,7 +241,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
                 :type="confirmFieldType"
                 class="font-medium"
                 size="xl"
-                placeholder="Confirmer le mot de passe"
+                :placeholder="t('authModal.placeholders.confirm')"
                 :ui="{ icon: { trailing: { pointer: '' } } }"
               >
                 <template #trailing>
@@ -250,7 +256,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
                     block
                     autocomplete="off"
                     @click="toggleConfirmVisible"
-                  ></UButton>
+                  />
                 </template>
               </UInput>
             </UFormGroup>
@@ -260,19 +266,19 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
               type="submit"
               :loading="loading"
               size="xl"
-              :label="existingUser ? 'Se connecter' : 'S\'inscrire'"
+              :label="existingUser ? t('authModal.buttons.login') : t('authModal.buttons.register')"
               class="w-full text-center"
               padded
               block
             />
           </UForm>
         </div>
-        <UDivider label="ou" />
+        <UDivider :label="t('authModal.divider')" />
         <UButton
           color="white"
           size="xl"
           padded
-          label="Continuer avec Google"
+          :label="t('authModal.buttons.google')"
           icon="i-simple-icons-google"
           block
           @click="loginWithGoogle"
