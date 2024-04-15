@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import * as Jspdf from 'jspdf';
+import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { z } from 'zod';
 
@@ -125,21 +125,21 @@ definePageMeta({
 const menuItems = [
   [
     {
-      label: 'Copy link',
+      label: t('trip.copy'),
       icon: 'i-heroicons-link-solid',
       click: () => {
         copyToClipboard();
       },
     },
     {
-      label: 'Export to pdf',
+      label: t('trip.export'),
       icon: 'i-heroicons-document-solid',
       click: () => {
         exportToPdf();
       },
     },
     {
-      label: 'Share by email',
+      label: t('trip.share-email'),
       icon: 'i-heroicons-envelope-solid',
       disabled: true,
       click: () => {
@@ -172,7 +172,8 @@ async function exportToPdf() {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const elements = document.querySelectorAll('.pdf-content');
-  const pdf = new Jspdf('p', 'mm', 'a4');
+  // eslint-disable-next-line new-cap
+  const pdf = new jsPDF('p', 'mm', 'a4');
 
   let pdfHeight = 0;
 

@@ -53,7 +53,7 @@
           </div>
           <div class="p-4 flex justify-end">
             <NuxtLink :to="localePath(`/mytrip/${trip.id}`)">
-              <UButton label="More details" color="primary">
+              <UButton :label="t('trip.more')" color="primary">
                 <template #trailing>
                   <UIcon name="i-heroicons-arrow-right-20-solid" class="w-5 h-5" />
                 </template>
@@ -111,14 +111,14 @@ definePageMeta({
 const menuItems = [
   [
     {
-      label: 'Edit trip',
+      label: t('trip.edit'),
       icon: 'i-heroicons-pencil-square-solid',
       click: () => {
         editTrip(selectedTrip.value.path);
       },
     },
     {
-      label: 'Delete trip',
+      label: t('trip.remove'),
       icon: 'i-heroicons-trash-solid',
       click: () => {
         deleteTrip(selectedTrip.value.id);
@@ -148,11 +148,11 @@ const tripStatus = (startDate, endDate) => {
 
   if (now < start) {
     const diff = Math.ceil((start - now) / (1000 * 60 * 60 * 24));
-    return `in ${diff} days`;
+    return `${t('trip.in')} ${diff} ${t('trip.days')}`;
   } else if (now > end) {
-    return 'finished';
+    return t('trip.finished');
   } else {
-    return 'in progress';
+    return t('trip.progress');
   }
 };
 

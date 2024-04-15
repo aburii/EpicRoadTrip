@@ -114,7 +114,7 @@
             </p>
           </div>
           <div class="xl:hidden lg:hidden">
-            <UButton class="my-2" @click="validateTrip()"> Validate </UButton>
+            <UButton class="my-2" @click="validateTrip()">{{ t('trip.validate') }} </UButton>
           </div>
         </div>
       </div>
@@ -124,7 +124,9 @@
         </UDropdown>
       </div>
       <div class="absolute bottom-0 right-0 xl:block lg:block sm:hidden m-6">
-        <UButton size="xl" class="text-xl mx-2" @click="validateTrip()"> Validate </UButton>
+        <UButton size="xl" class="text-xl mx-2" @click="validateTrip()">{{
+          t('trip.validate')
+        }}</UButton>
       </div>
       <!-- DRAWER -->
       <Transition
@@ -334,7 +336,7 @@ const state = reactive({
 const menuItems = [
   [
     {
-      label: 'Home',
+      label: t('trip.home'),
       icon: 'i-heroicons-home-solid',
       click: () => {
         navigateTo({
@@ -345,7 +347,7 @@ const menuItems = [
   ],
   [
     {
-      label: 'My Trips',
+      label: t('trip.mytrips'),
       icon: 'i-heroicons-map-solid',
       click: () => {
         navigateTo({
