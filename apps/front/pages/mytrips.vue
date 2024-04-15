@@ -2,63 +2,66 @@
   <div>
     <div>
       <div v-if="!loading && trips.length > 0">
-        <div
-          v-for="trip in trips"
-          :key="trip.id"
-          class="flex flex-col rounded-lg overflow-hidden shadow-md my-4 relative bg-white"
-        >
-          <TripMap class="h-72 w-full" :zoom="6" :routes="trip.route" :copyright="true" />
-          <div class="absolute top-0 left-0 bg-white p-2 m-2 shadow-md">
-            <span class="text-primary font-bold">
-              {{ tripStatus(trip.start_date, trip.end_date) }}
-            </span>
-          </div>
-          <div class="absolute top-0 right-0 m-2">
-            <UDropdown :items="menuItems" :popper="{ placement: 'bottom-start' }" class="m-2">
-              <UButton
-                icon="i-heroicons-cog-8-tooth-solid"
-                color="primary"
-                variant="solid"
-                @click="selectedTrip = trip"
-              />
-            </UDropdown>
-          </div>
-          <div class="px-4 flex-grow">
-            <p class="text-md lg:text-xl">
-              <span class="font-bold text-primary">
-                {{ trip.origin }}
+        <div v-for="group in groupedTrips" :key="group.label">
+          <UDivider class="" :label="group.label" />
+          <div
+            v-for="trip in group.trips"
+            :key="trip.id"
+            class="flex flex-col rounded-lg overflow-hidden shadow-md my-4 mb-8 relative bg-white"
+          >
+            <TripMap class="h-72 w-full" :zoom="6" :routes="trip.route" :copyright="true" />
+            <div class="absolute top-0 left-0 bg-white p-2 m-2 shadow-md">
+              <span class="text-primary font-bold">
+                {{ tripStatus(trip.start_date, trip.end_date) }}
               </span>
-              {{ t('trip.recap.3') }}
-              <span class="font-bold text-primary">
-                {{ trip.destination }}
-              </span>
-            </p>
-            <p class="lg:text-xl">
-              <span class="text-primary font-bold">{{
-                new Date(trip.start_date).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })
-              }}</span>
-              {{ t('trip.recap.5') }}
-              <span class="text-primary font-bold">{{
-                new Date(trip.end_date).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })
-              }}</span>
-            </p>
-          </div>
-          <div class="p-4 flex justify-end">
-            <NuxtLink :to="localePath(`/mytrip/${trip.id}`)">
-              <UButton :label="t('trip.more')" color="primary">
-                <template #trailing>
-                  <UIcon name="i-heroicons-arrow-right-20-solid" class="w-5 h-5" />
-                </template>
-              </UButton>
-            </NuxtLink>
+            </div>
+            <div class="absolute top-0 right-0 m-2">
+              <UDropdown :items="menuItems" :popper="{ placement: 'bottom-start' }" class="m-2">
+                <UButton
+                  icon="i-heroicons-cog-8-tooth-solid"
+                  color="primary"
+                  variant="solid"
+                  @click="selectedTrip = trip"
+                />
+              </UDropdown>
+            </div>
+            <div class="px-4 flex-grow">
+              <p class="text-md lg:text-xl">
+                <span class="font-bold text-primary">
+                  {{ trip.origin }}
+                </span>
+                {{ t('trip.recap.3') }}
+                <span class="font-bold text-primary">
+                  {{ trip.destination }}
+                </span>
+              </p>
+              <p class="lg:text-xl">
+                <span class="text-primary font-bold">{{
+                  new Date(trip.start_date).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })
+                }}</span>
+                {{ t('trip.recap.5') }}
+                <span class="text-primary font-bold">{{
+                  new Date(trip.end_date).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })
+                }}</span>
+              </p>
+            </div>
+            <div class="p-4 flex justify-end">
+              <NuxtLink :to="localePath(`/mytrip/${trip.id}`)">
+                <UButton :label="t('trip.more')" color="primary">
+                  <template #trailing>
+                    <UIcon name="i-heroicons-arrow-right-20-solid" class="w-5 h-5" />
+                  </template>
+                </UButton>
+              </NuxtLink>
+            </div>
           </div>
         </div>
       </div>
@@ -176,6 +179,36 @@ function sortTrips(trips) {
     }
   });
 }
+
+const groupedTrips = computed(() => {
+  const upcoming = [];
+  const inProgress = [];
+  const finished = [];
+
+  for (const trip of trips.value) {
+    const status = tripStatus(trip.start_date, trip.end_date);
+    if (status.includes(t('trip.days'))) {
+      upcoming.push(trip);
+    } else if (status === t('trip.progress')) {
+      inProgress.push(trip);
+    } else {
+      finished.push(trip);
+    }
+  }
+
+  const groups = [];
+  if (inProgress.length > 0) {
+    groups.push({ label: t('trip.progress'), trips: inProgress });
+  }
+  if (upcoming.length > 0) {
+    groups.push({ label: t('trip.upcoming'), trips: upcoming });
+  }
+  if (finished.length > 0) {
+    groups.push({ label: t('trip.finished'), trips: finished });
+  }
+
+  return groups;
+});
 
 async function fetchData() {
   const { data } = await $supabase.auth.getSession();

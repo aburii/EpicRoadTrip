@@ -45,22 +45,21 @@
           :fullscreen-map="true"
           :copyright="true"
         />
-        <div class="p-4 mb-2 text-lg">
-          <div class="timeline">
-            <div v-for="(coord, index) in RouteCoords" :key="index" class="timeline-item">
-              <div class="timeline-marker">
-                <span class="index"></span>
-              </div>
-              <div class="timeline-content">
-                <UBadge color="white" variant="solid">{{
-                  new Date(dates[index]).toLocaleDateString('fr-FR', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                  })
-                }}</UBadge>
-                <h2 class="font-bold text-primary text-sm lg:text-md">{{ coord.name }}</h2>
-              </div>
+        <div>
+          <h2 class="font-bold text-md lg:text-lg mx-4">{{ t('trip.waypoints') }}</h2>
+        </div>
+        <div class="text-lg p-4 mb-4">
+          <div v-for="(coord, index) in RouteCoords" :key="index">
+            <div class="mb-1">
+              <UBadge class="my-2" color="white" variant="solid">{{
+                new Date(dates[index]).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric',
+                })
+              }}</UBadge>
+              <h2 class="font-bold text-primary text-sm lg:text-md mb-2">{{ coord.name }}</h2>
+              <UDivider />
             </div>
           </div>
         </div>
@@ -209,46 +208,3 @@ async function fetchData() {
 
 onMounted(fetchData);
 </script>
-
-<style scoped>
-.timeline {
-  position: relative;
-  padding-left: 30px;
-}
-
-.timeline:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 2px;
-  background: #ff6b00;
-}
-
-.timeline-item {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.timeline-marker {
-  position: absolute;
-  left: -15px;
-  width: 10px;
-  height: 10px;
-  background: #ff6b00;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.timeline-marker .index {
-  color: white;
-  font-size: 12px;
-}
-
-.timeline-content {
-  padding-left: 20px;
-}
-</style>
