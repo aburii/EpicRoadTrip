@@ -7,4 +7,10 @@ export default defineNuxtRouteMiddleware(async () => {
   if (!session.data.session) {
     return navigateTo(localePath('/'));
   }
+
+  $supabase.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_OUT' || !session) {
+      await navigateTo(localePath('/'));
+    }
+  });
 });

@@ -219,6 +219,7 @@
       <div class="absolute bottom-0 left-0 right-0">
         <UProgress v-if="waypointLoading" animation="carousel" />
       </div>
+      <AppAuthModal v-model:open="authModalOpen" />
     </div>
   </div>
 </template>
@@ -287,6 +288,7 @@ const nmbrResults = ref<number>(0);
 const waypointLoading = ref(false);
 const collasped = ref(false);
 const drawerOpen = ref(false);
+const authModalOpen = ref(false);
 const selectedItem = ref<Array<z.infer<typeof PlaceSchema>>>([]);
 const places = ref<Array<z.infer<typeof PlaceSchema>>>([]);
 const routes = ref<z.infer<typeof RouteSchema>>({
@@ -400,11 +402,15 @@ function openClose() {
   collasped.value = !collasped.value;
 }
 
+function openAuthModal() {
+  authModalOpen.value = true;
+}
+
 async function validateTrip() {
   const { data } = await $supabase.auth.getSession();
 
   if (!data || !data.session) {
-    toast.add({ title: 'You need to be logged in to save a trip' });
+    openAuthModal();
     return;
   }
   try {
