@@ -99,5 +99,6 @@
     "success-register": "You are now registered as {user}."
   },
 
+  "logout": "You have been logged out.",
   "internal-error": "An unexpected error happened, if the problem persists, please contact us."
 }

@@ -96,6 +96,6 @@
     "success-register": "Vous êtes maintenant inscrit en tant que {user}.",
     "divider": "ou"
   },
-
+  "logout": "Vous avez été déconnecté.",
   "internal-error": "Une erreur inatendue est survenue, si le problème persiste, contactez-nous."
 }

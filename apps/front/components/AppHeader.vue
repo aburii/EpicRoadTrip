@@ -5,6 +5,7 @@ const { locales } = i18n;
 const supabase = useSupabaseAuth();
 const { signOut, user } = supabase;
 const localePath = useLocalePath();
+const toast = useToast();
 
 const userLoggedIn = computed(() => !!supabase.user.value);
 const guestDropdownItems = computed(() => {
@@ -47,6 +48,7 @@ const userDropdownItem = computed(() => {
         class: 'text-red-500 hover:text-red-600',
         click: async () => {
           await signOut();
+          toast.add({ title: t('logout'), timeout: 5000 });
         },
       },
     ],
