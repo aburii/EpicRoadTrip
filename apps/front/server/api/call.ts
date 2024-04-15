@@ -121,7 +121,7 @@ export default defineEventHandler(async (event) => {
       method: 'GET',
       query: {
         location: `${i % 2 === 0 ? placesStep.start_location.lat : placesStep.end_location.lat},${i % 2 === 0 ? placesStep.start_location.lng : placesStep.end_location.lng}`,
-        type: 'museum',
+        type: query.places_type,
         radius: 10000,
         key: config.googleApiKey,
       },

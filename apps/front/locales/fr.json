@@ -41,6 +41,24 @@
     "addTooltip": "ajouter au roadtrip",
     "start": "Début",
     "stop": "Fin",
+    "validate": "Valider",
+    "home": "Accueil",
+    "mytrips": "Mes voyages",
+    "remove": "Supprimer",
+    "edit": "Modifier",
+    "more": "Plus d'informations",
+    "progress": "En cours",
+    "finished": "Terminé",
+    "in": "Dans",
+    "days": "jours",
+    "upcoming": "Prochainement",
+    "copy": "Copier url",
+    "export": "Exporter en pdf",
+    "share-email": "Partager par email",
+    "back-home": "Retour à l'accueil",
+    "none-saved": "Vous n'avez pas de voyage sauvegardé.",
+    "none-found": "Nous n'avons pas trouvé ce voyage",
+    "waypoints": "Le récapitulatif",
     "loadingSentences": [
       "Nous preparons votre voyage!",
       "Nous cherchons les meilleurs hotels!",
@@ -60,8 +78,8 @@
 
   "header": {
     "dropdown": {
-      "register" : "S'inscrire",
-      "login" : "Se connecter",
+      "register": "S'inscrire",
+      "login": "Se connecter",
       "logout": "Deconnexion",
       "logged-as": "Connecté en tant que",
       "my-trips": "Mes voyages"
@@ -80,7 +98,7 @@
     "registering-with": "S'enregistrer avec : ",
     "not-you": "Ce n'est pas vous ?",
     "waiting-confirmation": "Un mail de confirmation à été envoyé à {email}.",
-    "placeholders" : {
+    "placeholders": {
       "email": "Adresse e-mail",
       "password": "Mot de passe",
       "confirm": "Confirmer le mot de passe"
@@ -97,5 +115,6 @@
     "divider": "ou"
   },
   "logout": "Vous avez été déconnecté.",
-  "internal-error": "Une erreur inatendue est survenue, si le problème persiste, contactez-nous."
+  "internal-error": "Une erreur inatendue est survenue, si le problème persiste, contactez-nous.",
+  "no-data": "Aucune donnée disponible."
 }

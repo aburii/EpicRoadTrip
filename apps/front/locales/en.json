@@ -41,6 +41,24 @@
     "addTooltip": "add to roadtrip",
     "start": "Start",
     "stop": "Stop",
+    "validate": "Validate",
+    "home": "Home",
+    "mytrips": "My trips",
+    "remove": "Remove",
+    "edit": "Edit",
+    "more": "More details",
+    "progress": "In progress",
+    "finished": "Finished",
+    "in": "In",
+    "days": "days",
+    "upcoming": "Upcoming",
+    "copy": "Copy link",
+    "export": "Export to pdf",
+    "share-email": "Share by email",
+    "back-home": "Go home",
+    "none-saved": "You have no saved trips.",
+    "none-found": "Trip not found!",
+    "waypoints": "Your summary:",
     "loadingSentences": [
       "We're preparing your trip!",
       "We're looking for the best hotels!",
@@ -62,8 +80,8 @@
 
   "header": {
     "dropdown": {
-      "register" : "Sign up",
-      "login" : "Sign in",
+      "register": "Sign up",
+      "login": "Sign in",
       "logout": "Log out",
       "logged-as": "Signed in as",
       "my-trips": "My trips"
@@ -82,7 +100,7 @@
     "registering-with": "Registering with:",
     "waiting-confirmation": "A confirmation email has been sent to {email}.",
     "not-you": "Not you?",
-    "placeholders" : {
+    "placeholders": {
       "email": "E-mail address",
       "password": "Password",
       "confirm": "Repeat password"
@@ -100,5 +118,6 @@
   },
 
   "logout": "You have been logged out.",
-  "internal-error": "An unexpected error happened, if the problem persists, please contact us."
+  "internal-error": "An unexpected error happened, if the problem persists, please contact us.",
+  "no-data": "No data found!"
 }

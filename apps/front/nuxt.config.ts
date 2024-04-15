@@ -26,6 +26,7 @@ export default defineNuxtConfig({
   },
 
   i18n: {
+    strategy: 'prefix',
     vueI18n: './i18n.config.ts',
     locales: [
       {
