@@ -11,7 +11,7 @@ const { $supabase } = useNuxtApp();
 const open = defineModel<boolean>('open');
 const existingUser = ref<User | undefined>();
 const loading = ref(false);
-const authEmailStep = ref<'email' | 'password'>('email');
+const authEmailStep = ref<'email' | 'password' | 'confirmation'>('email');
 const userEmail = ref<string | undefined>();
 const passwordFieldType = ref<'password' | 'text'>('password');
 const confirmFieldType = ref<'password' | 'text'>('password');
@@ -146,7 +146,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
     if (error) {
       toast.add({ title: error.message, color: 'red' });
     } else {
-      resetFormsValue();
+      authEmailStep.value = 'confirmation';
       toast.add({
         title: t('authModal.success-register', { user: userEmail.value }),
         timeout: 5000,
@@ -206,7 +206,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
             />
           </UForm>
           <UForm
-            v-else
+            v-else-if="authEmailStep === 'password'"
             :schema="passwordFormSchema"
             :state="passwordFormState"
             class="space-y-8"
@@ -292,6 +292,21 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
               block
             />
           </UForm>
+          <div v-else-if="authEmailStep" class="flex lg:justify-between flex-col lg:flex-row">
+            <span>
+              {{ t('authModal.waiting-confirmation', { email: userEmail }) }}
+            </span>
+            <span class="text-gray-500 text-sm">
+              <UButton
+                type="button"
+                variant="link"
+                color="gray"
+                class="underline"
+                :label="t('authModal.buttons.login')"
+                @click="resetFormsValue"
+              />
+            </span>
+          </div>
         </div>
         <UDivider :label="t('authModal.divider')" />
         <UButton

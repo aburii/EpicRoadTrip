@@ -79,6 +79,7 @@
     "hello": "Bonjour",
     "registering-with": "S'enregistrer avec : ",
     "not-you": "Ce n'est pas vous ?",
+    "waiting-confirmation": "Un mail de confirmation à été envoyé à {email}.",
     "placeholders" : {
       "email": "Adresse e-mail",
       "password": "Mot de passe",

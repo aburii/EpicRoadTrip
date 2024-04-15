@@ -80,6 +80,7 @@
     "welcome": "Welcome to Lana.",
     "hello": "Hello",
     "registering-with": "Registering with:",
+    "waiting-confirmation": "A confirmation email has been sent to {email}.",
     "not-you": "Not you?",
     "placeholders" : {
       "email": "E-mail address",
