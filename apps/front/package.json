@@ -34,6 +34,8 @@
     "@supabase/supabase-js": "^2.39.8",
     "date-fns": "^3.6.0",
     "gsap": "^3.12.5",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "pinia": "^2.1.7",
     "v-calendar": "next",
     "vue3-google-map": "^0.20.0",
