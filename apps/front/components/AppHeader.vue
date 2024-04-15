@@ -1,48 +1,60 @@
 <script setup lang="ts">
-import type { DropdownItem } from '#ui/types';
-
 const i18n = useI18n();
 const { t } = i18n;
 const { locales } = i18n;
 const supabase = useSupabaseAuth();
 const { signOut, user } = supabase;
+const localePath = useLocalePath();
 
 const userLoggedIn = computed(() => !!supabase.user.value);
-const guestDropdownItems: DropdownItem[][] = [
-  [
-    {
-      label: t('header.dropdown.register'),
-      slot: 'register',
-      disabled: userLoggedIn.value,
-      labelClass: 'font-bold',
-      click: openAuthModal,
-    },
-  ],
-  [
-    {
-      label: t('header.dropdown.login'),
-      slot: 'connect',
-      disabled: userLoggedIn.value,
-      click: openAuthModal,
-    },
-  ],
-];
-const userDropdownItem: DropdownItem[][] = [
-  [{ label: t('header.dropdown.logged-as'), disabled: true, slot: 'account' }],
-  [
-    {
-      label: t('header.dropdown.logout'),
-      icon: 'i-heroicons-arrow-left-on-rectangle',
-      class: 'text-red-500 hover:text-red-600',
-      click: async () => {
-        await signOut();
+const guestDropdownItems = computed(() => {
+  return [
+    [
+      {
+        label: t('header.dropdown.register'),
+        slot: 'register',
+        disabled: userLoggedIn.value,
+        labelClass: 'font-bold',
+        click: openAuthModal,
       },
-    },
-  ],
-];
+    ],
+    [
+      {
+        label: t('header.dropdown.login'),
+        slot: 'connect',
+        disabled: userLoggedIn.value,
+        click: openAuthModal,
+      },
+    ],
+  ];
+});
+const userDropdownItem = computed(() => {
+  return [
+    [{ label: t('header.dropdown.logged-as'), disabled: true, slot: 'account' }],
+    [
+      {
+        label: t('header.dropdown.my-trips'),
+        icon: 'i-heroicons-map',
+        click: async () => {
+          await navigateTo(localePath('/mytrips'));
+        },
+      },
+    ],
+    [
+      {
+        label: t('header.dropdown.logout'),
+        icon: 'i-heroicons-arrow-left-on-rectangle',
+        class: 'text-red-500 hover:text-red-600',
+        click: async () => {
+          await signOut();
+        },
+      },
+    ],
+  ];
+});
 
 const authDropdownItems = computed(() => {
-  return userLoggedIn.value ? userDropdownItem : guestDropdownItems;
+  return userLoggedIn.value ? userDropdownItem.value : guestDropdownItems.value;
 });
 const authModalOpen = ref(false);
 
@@ -69,6 +81,7 @@ function openAuthModal() {
             :key="loc.code"
             variant="ghost"
             class="block w-full"
+            color="black"
             size="lg"
             :ui="{ rounded: 'rounded-none' }"
             @click="i18n.setLocale(loc.code)"

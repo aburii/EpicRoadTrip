@@ -63,7 +63,8 @@
       "register" : "S'inscrire",
       "login" : "Se connecter",
       "logout": "Deconnexion",
-      "logged-as": "Connecté en tant que"
+      "logged-as": "Connecté en tant que",
+      "my-trips": "Mes voyages"
     }
   },
 

@@ -65,7 +65,8 @@
       "register" : "Sign up",
       "login" : "Sign in",
       "logout": "Log out",
-      "logged-as": "Signed in as"
+      "logged-as": "Signed in as",
+      "my-trips": "My trips"
     }
   },
 
