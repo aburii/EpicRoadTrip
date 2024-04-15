@@ -121,13 +121,6 @@ function openAuthModal() {
         </template>
       </UDropdown>
       <AppAuthModal v-model:open="authModalOpen" />
-      <UButton
-        icon="i-heroicons-user-circle"
-        size="xl"
-        color="black"
-        variant="ghost"
-        :trailing="false"
-      />
     </section>
   </header>
 </template>
