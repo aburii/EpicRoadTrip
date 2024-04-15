@@ -15,6 +15,10 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxt/fonts', '@nuxtjs/i18n', '@pinia/nuxt'],
 
+  ui: {
+    icons: ['simple-icons'],
+  },
+
   fonts: {
     experimental: {
       processCSSVariables: true,

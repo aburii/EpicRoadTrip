@@ -56,5 +56,46 @@
     "copyrights": "Tous droits réservés.",
     "termsOfUse": "Conditions d'utilisation",
     "privacy": "Confidentialité"
-  }
+  },
+
+  "header": {
+    "dropdown": {
+      "register" : "S'inscrire",
+      "login" : "Se connecter",
+      "logout": "Deconnexion",
+      "logged-as": "Connecté en tant que",
+      "my-trips": "Mes voyages"
+    }
+  },
+
+  "authModal": {
+    "errors": {
+      "invalid-email": "Vous devez fournir une adresse mail valide.",
+      "password-length": "Le mot de passe doit contenir au moins {nb} caractères.",
+      "confirm-password": "Les mots de passes doivent être indentiques."
+    },
+    "title": "Connexion ou inscription",
+    "welcome": "Bienvenue sur Lana.",
+    "hello": "Bonjour",
+    "registering-with": "S'enregistrer avec : ",
+    "not-you": "Ce n'est pas vous ?",
+    "waiting-confirmation": "Un mail de confirmation à été envoyé à {email}.",
+    "placeholders" : {
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "confirm": "Confirmer le mot de passe"
+    },
+    "buttons": {
+      "google": "Continuer avec Google",
+      "continue": "Continuer",
+      "login": "Se connecter",
+      "register": "S'inscrire",
+      "back": "Retour"
+    },
+    "success-login": "Vous êtes maintenant connecté en tant que {user}.",
+    "success-register": "Vous êtes maintenant inscrit en tant que {user}.",
+    "divider": "ou"
+  },
+  "logout": "Vous avez été déconnecté.",
+  "internal-error": "Une erreur inatendue est survenue, si le problème persiste, contactez-nous."
 }

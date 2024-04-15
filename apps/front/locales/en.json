@@ -58,5 +58,47 @@
     "copyrights": "All rights reserved.",
     "termsOfUse": "Terms of use",
     "privacy": "Privacy"
-  }
+  },
+
+  "header": {
+    "dropdown": {
+      "register" : "Sign up",
+      "login" : "Sign in",
+      "logout": "Log out",
+      "logged-as": "Signed in as",
+      "my-trips": "My trips"
+    }
+  },
+
+  "authModal": {
+    "errors": {
+      "invalid-email": "You need to provide a valid e-mail address.",
+      "password-length": "Password needs to contain at least {nb} characters.",
+      "confirm-password": "Passwords must be identical."
+    },
+    "title": "Sign-in or sign-up",
+    "welcome": "Welcome to Lana.",
+    "hello": "Hello",
+    "registering-with": "Registering with:",
+    "waiting-confirmation": "A confirmation email has been sent to {email}.",
+    "not-you": "Not you?",
+    "placeholders" : {
+      "email": "E-mail address",
+      "password": "Password",
+      "confirm": "Repeat password"
+    },
+    "buttons": {
+      "google": "Continue with Google",
+      "continue": "Continue",
+      "login": "Sign-in",
+      "register": "Sign-up",
+      "back": "Go back"
+    },
+    "divider": "or",
+    "success-login": "You are now logged in as {user}.",
+    "success-register": "You are now registered as {user}."
+  },
+
+  "logout": "You have been logged out.",
+  "internal-error": "An unexpected error happened, if the problem persists, please contact us."
 }

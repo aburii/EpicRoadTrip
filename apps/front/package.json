@@ -38,6 +38,7 @@
     "v-calendar": "next",
     "vue3-google-map": "^0.20.0",
     "vue3-star-ratings": "^3.0.5",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "@iconify-json/simple-icons": "^1.1.99"
   }
 }
