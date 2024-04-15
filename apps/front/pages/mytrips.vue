@@ -73,7 +73,7 @@
       </div>
     </div>
     <div v-if="!loading && trips.length == 0" class="flex flex-col items-center justify-center">
-      <NoDataFound title="No trips saved yet!" />
+      <NoDataFound :title="t('trip.none-saved')" />
     </div>
   </div>
 </template>

@@ -67,7 +67,7 @@
       </div>
     </div>
     <div v-if="!loading && !mytrip" class="flex flex-col items-center justify-center">
-      <NoDataFound title="Trip not found!" />
+      <NoDataFound :title="t('trip.none-found')" />
     </div>
     <div v-if="loading">
       <LoaderTripView />

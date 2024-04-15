@@ -121,26 +121,37 @@ const RouteSchema = z.object({
   steps: z.array(StepSchema),
 });
 
-const props = defineProps({
-  routes: {
-    type: Array as PropType<z.infer<typeof RouteSchema>[]>,
-    default: () => [],
-  },
-  zoom: {
-    type: Number,
-    default: 7,
-  },
-  fullscreenMap: {
-    type: Boolean,
-    default: false,
-  },
-  copyright: {
-    type: Boolean,
-    default: false,
-  },
+export interface Props {
+  routes?: z.infer<typeof RouteSchema>[];
+  zoom?: number;
+  fullscreenMap?: boolean;
+  copyright?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  routes: () => [],
+  zoom: 7,
+  fullscreenMap: false,
+  copyright: false,
 });
 
 const slicedRoutes = computed(() => props.routes.slice(1, -1));
+
+const tripCoordinates = computed(() =>
+  props.routes.length > 0
+    ? props.routes.flatMap((route) =>
+        route.steps.flatMap((step) => decode(step.polyline).map(([lat, lng]) => ({ lat, lng }))),
+      )
+    : [],
+);
+
+const tripPath = computed(() => ({
+  path: tripCoordinates.value,
+  geodesic: true,
+  strokeColor: '#FF6B00',
+  strokeOpacity: 1.0,
+  strokeWeight: 5,
+}));
 
 const startPoint = reactive({
   lat: props.routes[0].lat,
@@ -154,12 +165,6 @@ const center = reactive({
   lat: props.routes[0].lat,
   lng: props.routes[0].long,
 });
-
-const tripCoordinates = reactive(
-  props.routes.flatMap((route) =>
-    route.steps.flatMap((step) => decode(step.polyline).map(([lat, lng]) => ({ lat, lng }))),
-  ),
-);
 
 const markerIcon = {
   path: 'M0,-48v48h48v-48z',
@@ -182,14 +187,6 @@ const markerEnd = {
   label: { text: t('trip.stop'), color: 'white', fontSize: '10px' },
   title: 'Ending Point',
   icon: markerIcon,
-};
-
-const tripPath = {
-  path: tripCoordinates,
-  geodesic: true,
-  strokeColor: '#FF6B00',
-  strokeOpacity: 1.0,
-  strokeWeight: 5,
 };
 
 watch(

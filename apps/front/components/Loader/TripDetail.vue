@@ -9,6 +9,10 @@
     </p>
   </div>
   <div class="p-4 flex justify-end">
-    <UButton name="i-heroicons-chevron-right" disabled>More details</UButton>
+    <UButton name="i-heroicons-chevron-right" disabled>{{ t('trip.more') }}</UButton>
   </div>
 </template>
+
+<script setup LANG="ts">
+const { t } = useI18n();
+</script>
