@@ -91,6 +91,7 @@
       "back": "Retour"
     },
     "success-login": "Vous êtes maintenant connecté en tant que {user}.",
+    "success-register": "Vous êtes maintenant inscrit en tant que {user}.",
     "divider": "ou"
   },
 

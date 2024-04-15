@@ -32,13 +32,24 @@ const passwordFormSchema = z
   .object({
     password: z
       .string({ required_error: t('authModal.errors.password-length') })
-      .min(6, t('authModal.errors.password-length', { nb: 6 })),
+      .min(6, t('authModal.errors.password-length', { nb: 6 }))
+      .optional()
+      .or(z.literal('')),
     passwordConfirm: z.optional(z.string()),
   })
-  .refine((data) => !existingUser.value && data.passwordConfirm === data.password, {
-    message: t('authModal.errors.confirm-password'),
-    path: ['passwordConfirm'],
-  });
+  .refine(
+    (data) => {
+      if (existingUser.value) {
+        return true;
+      }
+
+      return data.password === data.passwordConfirm;
+    },
+    {
+      message: t('authModal.errors.confirm-password'),
+      path: ['passwordConfirm'],
+    },
+  );
 
 type PasswordSchema = z.output<typeof passwordFormSchema>;
 
@@ -115,23 +126,31 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
   }
 
   if (existingUser.value) {
+    if (!event.data.password) {
+      loading.value = false;
+      return;
+    }
+
     const { error } = await signInWithEmail(userEmail.value, event.data.password);
 
     if (error) {
       toast.add({ title: error.message, color: 'red' });
     } else {
       open.value = false;
-      toast.add({ title: t('authModal.success-login') });
+      toast.add({ title: t('authModal.success-login', { user: userEmail.value }), timeout: 5000 });
     }
     loading.value = false;
   } else {
-    const { error } = await signUpWithEmail(userEmail.value, event.data.password);
+    const { error } = await signUpWithEmail(userEmail.value, event.data.password!);
 
     if (error) {
       toast.add({ title: error.message, color: 'red' });
     } else {
-      open.value = false;
-      toast.add({ title: t('authModal.success-login') });
+      resetFormsValue();
+      toast.add({
+        title: t('authModal.success-register', { user: userEmail.value }),
+        timeout: 5000,
+      });
     }
     loading.value = false;
   }
@@ -268,6 +287,7 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
               size="xl"
               :label="existingUser ? t('authModal.buttons.login') : t('authModal.buttons.register')"
               class="w-full text-center"
+              :disabled="!passwordFormState.password"
               padded
               block
             />
