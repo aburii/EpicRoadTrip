@@ -74,8 +74,7 @@
   },
   "footer": {
     "copyrights": "All rights reserved.",
-    "termsOfUse": "Terms of use",
-    "privacy": "Privacy"
+    "legalNotice": "Legal notice"
   },
 
   "header": {
@@ -119,5 +118,6 @@
 
   "logout": "You have been logged out.",
   "internal-error": "An unexpected error happened, if the problem persists, please contact us.",
-  "no-data": "No data found!"
+  "no-data": "No data found!",
+  "back": "Back"
 }

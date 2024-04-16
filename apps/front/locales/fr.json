@@ -72,8 +72,7 @@
   },
   "footer": {
     "copyrights": "Tous droits réservés.",
-    "termsOfUse": "Conditions d'utilisation",
-    "privacy": "Confidentialité"
+    "legalNotice": "Mentions légales"
   },
 
   "header": {
@@ -116,5 +115,6 @@
   },
   "logout": "Vous avez été déconnecté.",
   "internal-error": "Une erreur inatendue est survenue, si le problème persiste, contactez-nous.",
-  "no-data": "Aucune donnée disponible."
+  "no-data": "Aucune donnée disponible.",
+  "back": "Retour"
 }

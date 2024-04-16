@@ -14,12 +14,12 @@ const travelSentences = tm('travelKeywords');
 
 const ranges = [
   { label: t('datePicker.ranges.oneDay'), duration: { days: 1 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { days: 7 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { days: 14 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { months: 1 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { months: 3 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { months: 6 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { years: 1 } },
+  { label: t('datePicker.ranges.oneWeek'), duration: { days: 7 } },
+  { label: t('datePicker.ranges.twoWeek'), duration: { days: 14 } },
+  { label: t('datePicker.ranges.oneMonth'), duration: { months: 1 } },
+  { label: t('datePicker.ranges.threeMonths'), duration: { months: 3 } },
+  { label: t('datePicker.ranges.sixMonths'), duration: { months: 6 } },
+  { label: t('datePicker.ranges.oneYear'), duration: { years: 1 } },
 ];
 
 const prices = ['$', '$$', '$$$', '$$$$'];
