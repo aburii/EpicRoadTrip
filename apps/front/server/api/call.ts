@@ -1,8 +1,15 @@
 import { DirectionsRes, directionsUrl, PlacesRes, placesUrl } from '@roadtrip/google-api';
 
+const TYPES: { all: string; hotel: string; restaurant: string; bar: string } = {
+  all: 'point of interest',
+  hotel: 'lodging',
+  restaurant: 'restaurant',
+  bar: 'bar',
+};
+
 type QueryType = {
-  places_type?: 'lodging' | 'museum' | 'restaurant';
   origin: string;
+  keyword?: string;
   destination: string;
   waypoints?: string;
   date_start?: Date;
@@ -70,6 +77,8 @@ export default defineEventHandler(async (event) => {
     roadDistance += leg.distance.value / 1000;
   });
 
+  console.log('roadDistance', roadDistance);
+
   directions?.routes[0]?.legs.forEach((leg) => {
     const steps = leg.steps.map((step) => ({
       distance: Math.round(step.distance.value / 1000),
@@ -102,9 +111,9 @@ export default defineEventHandler(async (event) => {
     (acc, route) => acc.concat(route.steps),
     [],
   );
+  let sum = 0;
   for (let i = 0; i < allSteps.length; i++) {
-    let sum = 0;
-    if (allSteps[i].distance + sum >= roadDistance / 10) {
+    if (allSteps[i].distance + sum >= 100) {
       placesSteps.push(allSteps[i]);
       sum = 0;
     }
@@ -121,14 +130,14 @@ export default defineEventHandler(async (event) => {
       method: 'GET',
       query: {
         location: `${i % 2 === 0 ? placesStep.start_location.lat : placesStep.end_location.lat},${i % 2 === 0 ? placesStep.start_location.lng : placesStep.end_location.lng}`,
-        type: query.places_type,
+        keyword: TYPES.all,
         radius: 10000,
         key: config.googleApiKey,
       },
     });
     for (let j = 0; j < placesFetched.results.length; j++) {
       const result = placesFetched.results[j];
-      places.push({
+      const place: PlaceType = {
         name: result.name,
         lat: result.geometry.location.lat,
         long: result.geometry.location.lng,
@@ -138,7 +147,8 @@ export default defineEventHandler(async (event) => {
         price_level: result.price_level as number,
         types: result.types,
         formatted_address: result.vicinity,
-      });
+      };
+      if (!places.includes(place)) places.push(place);
     }
   }
 
