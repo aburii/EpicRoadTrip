@@ -94,11 +94,12 @@ function openAuthModal() {
           </template>
         </UPopover>
       </div>
-      <h1
+      <NuxtLink
         class="font-title w-1/3 md:tracking-[0.8rem] tracking-[0.5rem] font-bold md:text-3xl text-2xl text-center uppercase"
+        :to="localePath('/')"
       >
         Lana
-      </h1>
+      </NuxtLink>
       <div class="w-1/3 text-end">
         <UDropdown :items="authDropdownItems">
           <UButton icon="i-heroicons-user-circle" size="xl" color="black" variant="ghost" trailing>

@@ -11,10 +11,10 @@ const currentYear = new Date().getFullYear();
       <div class="text-xs">© {{ currentYear }} Lana. {{ t('footer.copyrights') }}</div>
       <div>
         <UButton
-          :label="t('footer.legalMentions')"
+          :label="t('footer.legalNotice')"
           color="black"
           variant="link"
-          :to="localePath('/legal-mentions')"
+          :to="localePath('/legal-notice')"
         />
       </div>
     </section>
