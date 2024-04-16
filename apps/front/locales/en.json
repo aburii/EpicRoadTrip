@@ -39,6 +39,7 @@
     "avlb": " available",
     "info": "More info",
     "addTooltip": "add to roadtrip",
+    "removeTooltip": "remove from roadtrip",
     "start": "Start",
     "stop": "Stop",
     "validate": "Validate",

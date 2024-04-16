@@ -97,9 +97,18 @@
                 </div>
               </div>
               <div class="flex">
-                <UTooltip :text="t('trip.addTooltip')">
+                <UTooltip v-if="!isWaypointAdded(item)" :text="t('trip.addTooltip')">
                   <UButton class="text-xl" :disabled="waypointLoading" @click="addWaypoint(item)"
                     >+</UButton
+                  >
+                </UTooltip>
+                <UTooltip v-if="isWaypointAdded(item)" :text="t('trip.removeTooltip')">
+                  <UButton
+                    class="text-xl"
+                    color="red"
+                    :disabled="waypointLoading"
+                    @click="removeWaypoint(item)"
+                    >-</UButton
                   >
                 </UTooltip>
               </div>
@@ -237,6 +246,7 @@ definePageMeta({
 });
 
 const route = useRoute();
+const router = useRouter();
 const query = {
   origin: route.query.departure,
   destination: route.query.arrival,
@@ -282,6 +292,7 @@ const RouteSchema = z.object({
 const DataSchema = z.object({
   places: z.array(PlaceSchema),
   routes: z.array(RouteSchema),
+  status: z.string(),
 });
 
 const loading = ref(true);
@@ -302,6 +313,11 @@ const routes = ref<z.infer<typeof RouteSchema>>({
 const { t } = useI18n();
 const runtimeConfig = useRuntimeConfig();
 const apiKey = `${runtimeConfig.public.GOOGLE_API_KEY}`;
+
+const isWaypointAdded = (item) => {
+  const waypoints = route.query.waypoints && route.query.waypoints.split('|');
+  return waypoints && waypoints.includes(item.formatted_address);
+};
 
 const ranges = [
   { label: t('datePicker.ranges.oneDay'), duration: { days: 1 } },
@@ -400,6 +416,27 @@ async function addWaypoint(item: { formatted_address: String }) {
   fetchData();
 }
 
+async function removeWaypoint(item: { formatted_address: String }) {
+  waypointLoading.value = true;
+  let waypoints = route.query.waypoints ? route.query.waypoints.split('|') : [];
+  waypoints = waypoints.filter((waypoint) => waypoint !== item.formatted_address);
+  const waypointsParam = waypoints.length > 0 ? waypoints.join('|') : undefined;
+  await navigateTo({
+    query: {
+      departure: route.query.departure,
+      arrival: route.query.arrival,
+      price: route.query.price,
+      d_start: route.query.d_start,
+      d_end: route.query.d_end,
+      waypoints: waypointsParam,
+    },
+  });
+  query.origin = route.query.departure;
+  query.destination = route.query.arrival;
+  query.waypoints = route.query.waypoints || undefined;
+  fetchData();
+}
+
 function openClose() {
   collasped.value = !collasped.value;
 }
@@ -451,6 +488,13 @@ async function fetchData() {
     toast.add({ title: 'Failed to fetch data' });
   } else {
     const validatedData = DataSchema.parse(fetchedData.value);
+    if (validatedData.status === 'NOT_FOUND') {
+      waypointLoading.value = false;
+      loading.value = false;
+      router.back();
+      toast.add({ title: 'No data found' });
+      return;
+    }
     places.value = validatedData.places;
     routes.value = validatedData.routes;
     nmbrResults.value = validatedData.places.length;
