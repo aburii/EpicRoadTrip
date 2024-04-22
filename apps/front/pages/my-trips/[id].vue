@@ -17,21 +17,9 @@
             </p>
             <p class="text-md lg:text-lg">
               {{ t('trip.recap.4') }}
-              <span class="text-primary font-bold">{{
-                new Date(mytrip.start_date).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })
-              }}</span>
+              <span class="text-primary font-bold">{{ formatDate(mytrip.start_date) }}</span>
               {{ t('trip.recap.5') }}
-              <span class="text-primary font-bold">{{
-                new Date(mytrip.end_date).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })
-              }}</span>
+              <span class="text-primary font-bold">{{ formatDate(mytrip.end_date) }}</span>
             </p>
           </div>
           <UDropdown :items="menuItems" :popper="{ placement: 'bottom-start' }" class="m-2">
@@ -52,11 +40,7 @@
           <div v-for="(coord, index) in RouteCoords" :key="index">
             <div class="mb-1">
               <UBadge class="my-2" color="white" variant="solid">{{
-                new Date(dates[index]).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })
+                formatDate(dates[index])
               }}</UBadge>
               <h2 class="font-bold text-primary text-sm lg:text-md mb-2">{{ coord.name }}</h2>
               <UDivider />
@@ -80,6 +64,7 @@ import html2canvas from 'html2canvas';
 import { z } from 'zod';
 
 const route = useRoute();
+const formatDate = useFormatDate();
 const { $supabase } = useNuxtApp();
 
 const toast = useToast();

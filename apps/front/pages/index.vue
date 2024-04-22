@@ -70,7 +70,7 @@ const invertDestinations = () => {
         <AppTextWriter
           id="travelSentence"
           :duration="1"
-          :sentences="travelSentences"
+          :sentences="travelSentences as string[]"
           :interval="1500"
           class="font-light italic"
         />

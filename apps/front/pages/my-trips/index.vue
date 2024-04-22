@@ -36,21 +36,9 @@
                 </span>
               </p>
               <p class="lg:text-xl">
-                <span class="text-primary font-bold">{{
-                  new Date(trip.start_date).toLocaleDateString('fr-FR', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                  })
-                }}</span>
+                <span class="text-primary font-bold">{{ formatDate(trip.start_date) }}</span>
                 {{ t('trip.recap.5') }}
-                <span class="text-primary font-bold">{{
-                  new Date(trip.end_date).toLocaleDateString('fr-FR', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                  })
-                }}</span>
+                <span class="text-primary font-bold">{{ formatDate(trip.end_date) }}</span>
               </p>
             </div>
             <div class="p-4 flex justify-end">
@@ -85,7 +73,7 @@
 import { z } from 'zod';
 
 const { $supabase } = useNuxtApp();
-
+const formatDate = useFormatDate();
 const localePath = useLocalePath();
 const { t } = useI18n();
 
