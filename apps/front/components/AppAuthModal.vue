@@ -125,6 +125,8 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
     return toast.add({ title: t('internal-error'), color: 'red' });
   }
 
+  userEmail.value = userEmail.value.toLowerCase();
+
   if (existingUser.value) {
     if (!event.data.password) {
       loading.value = false;
