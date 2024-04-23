@@ -37,7 +37,7 @@ const userDropdownItem = computed(() => {
         label: t('header.dropdown.my-trips'),
         icon: 'i-heroicons-map',
         click: async () => {
-          await navigateTo(localePath('/mytrips'));
+          await navigateTo(localePath('/my-trips'));
         },
       },
     ],

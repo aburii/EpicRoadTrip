@@ -34,21 +34,9 @@
             </p>
             <p>
               {{ t('trip.recap.4') }}
-              <span class="text-primary font-bold">{{
-                new Date($route.query.d_start).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })
-              }}</span>
+              <span class="text-primary font-bold">{{ formatDate($route.query.d_start) }}</span>
               {{ t('trip.recap.5') }}
-              <span class="text-primary font-bold">{{
-                new Date($route.query.d_end).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })
-              }}</span>
+              <span class="text-primary font-bold">{{ formatDate($route.query.d_end) }}</span>
             </p>
           </div>
           <UTabs v-if="!collasped" :items="tabsItems" />
@@ -238,6 +226,7 @@ import vue3StarRatings from 'vue3-star-ratings';
 import { z } from 'zod';
 
 const localePath = useLocalePath();
+const formatDate = useFormatDate();
 
 const { $supabase } = useNuxtApp();
 
@@ -472,7 +461,7 @@ async function validateTrip() {
     }
     const tripId = data[0].id;
     await navigateTo({
-      path: localePath('/mytrip/' + tripId),
+      path: localePath('/my-trips/' + tripId),
     });
   } catch (error) {
     console.error('Unexpected error:', error);
