@@ -240,6 +240,8 @@ const route = useRoute();
 const query = {
   origin: route.query.departure,
   destination: route.query.arrival,
+  date_start: route.query.d_start,
+  date_end: route.query.d_end,
   ...(route.query.waypoints ? { waypoints: route.query.waypoints } : {}),
 };
 const {
