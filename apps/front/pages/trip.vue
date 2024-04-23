@@ -360,7 +360,7 @@ const menuItems = [
       icon: 'i-heroicons-map-solid',
       click: () => {
         navigateTo({
-          path: localePath('/mytrips/'),
+          path: localePath('/my-trips/'),
         });
       },
     },
