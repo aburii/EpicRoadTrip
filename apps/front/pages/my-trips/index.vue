@@ -42,7 +42,7 @@
               </p>
             </div>
             <div class="p-4 flex justify-end">
-              <NuxtLink :to="localePath(`/mytrip/${trip.id}`)">
+              <NuxtLink :to="localePath(`/my-trips/${trip.id}`)">
                 <UButton :label="t('trip.more')" color="primary">
                   <template #trailing>
                     <UIcon name="i-heroicons-arrow-right-20-solid" class="w-5 h-5" />
