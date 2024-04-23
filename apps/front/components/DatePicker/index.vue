@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { type Duration, format, isSameDay, add } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import type { DatePickerRange } from '~/types/date-picker';
 
 defineProps<{
   innerStyle: string;
   ranges: DatePickerRange[];
 }>();
+
+const formatDate = useFormatDate();
 
 const selected = defineModel<{ start: Date; end: Date }>();
 
@@ -40,8 +43,8 @@ function selectRange(duration: Duration) {
         },
       }"
     >
-      {{ format(selected.start, 'd MMM, yyy') }} -
-      {{ format(selected.end, 'd MMM, yyy') }}
+      {{ formatDate(selected.start) }} -
+      {{ formatDate(selected.end) }}
     </UButton>
 
     <template #panel="{ close }">
