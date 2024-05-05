@@ -72,6 +72,9 @@
       "Nous vous construisons le voyage de vos rêves!"
     ]
   },
+  "recommendations": {
+    "title": "Les meilleures roadtrips"
+  },
   "footer": {
     "copyrights": "Tous droits réservés.",
     "legalNotice": "Mentions légales"
