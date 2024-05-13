@@ -61,6 +61,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     googleApiKey: process.env.NUXT_GOOGLE_API_KEY,
+    tomtomApiKey: process.env.NUXT_TOMTOM_API_KEY,
     public: {
       SUPABASE_KEY: process.env.NUXT_PUBLIC_SUPABASE_KEY,
       SUPABASE_URL: process.env.NUXT_PUBLIC_SUPABASE_URL,

@@ -1,10 +1,11 @@
-import { DirectionsRes, directionsUrl, PlacesRes, placesUrl } from '@roadtrip/google-api';
+import { DirectionsRes, directionsUrl, nearbySearchUrl, NearbyRes } from '@roadtrip/google-api';
 
 type QueryType = {
-  places_type?: 'lodging' | 'museum' | 'restaurant';
+  places_type?: string;
   origin: string;
   destination: string;
   waypoints?: string;
+  language?: string;
   date_start?: Date;
   date_end?: Date;
 };
@@ -32,17 +33,12 @@ type PlaceType = {
   name: string;
   lat: number;
   long: number;
-  rating: number;
-  imgRef: string;
-  isOpen: boolean;
-  price_level: number;
-  types: string[];
   formatted_address?: string;
 };
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
-  const places: PlaceType[] = [];
+  let places: PlaceType[] = [];
   let routes: RouteType[] = [];
 
   const query: QueryType = getQuery(event);
@@ -117,29 +113,20 @@ export default defineEventHandler(async (event) => {
 
   for (let i = 0; i < placesSteps.length; i++) {
     const placesStep = placesSteps[i];
-    const placesFetched: PlacesRes = await $fetch(placesUrl, {
-      method: 'GET',
-      query: {
-        location: `${i % 2 === 0 ? placesStep.start_location.lat : placesStep.end_location.lat},${i % 2 === 0 ? placesStep.start_location.lng : placesStep.end_location.lng}`,
-        type: query.places_type,
-        radius: 10000,
-        key: config.googleApiKey,
-      },
-    });
-    for (let j = 0; j < placesFetched.results.length; j++) {
-      const result = placesFetched.results[j];
-      places.push({
-        name: result.name,
-        lat: result.geometry.location.lat,
-        long: result.geometry.location.lng,
-        rating: result.rating,
-        isOpen: result.opening_hours?.open_now as boolean,
-        imgRef: result.photos ? result.photos[0].photo_reference : '',
-        price_level: result.price_level as number,
-        types: result.types,
-        formatted_address: result.vicinity,
-      });
-    }
+
+    const placesFetched = await getNearbyPlaces(
+      query,
+      i % 2 === 0 ? placesStep.start_location.lat : placesStep.end_location.lat,
+      i % 2 === 0 ? placesStep.start_location.lng : placesStep.end_location.lng,
+      config.tomtomApiKey,
+    );
+
+    places = placesFetched.results.map((result) => ({
+      name: result.poi.name,
+      lat: result.position.lat,
+      long: result.position.lon,
+      formatted_address: result.address.freeFormAddress,
+    }));
   }
 
   return {
@@ -148,3 +135,18 @@ export default defineEventHandler(async (event) => {
     places,
   };
 });
+
+function getNearbyPlaces(query: QueryType, lat: number, lon: number, key: string) {
+  return $fetch<NearbyRes>(nearbySearchUrl, {
+    method: 'GET',
+    query: {
+      key,
+      lat,
+      lon,
+      limit: 100,
+      radius: 10000,
+      language: query.language,
+      categorySet: query.places_type,
+    },
+  });
+}

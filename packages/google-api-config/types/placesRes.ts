@@ -26,6 +26,41 @@ interface Result {
   permanently_closed?: boolean;
 }
 
+export interface NearbyRes {
+  summary: NearbySummary;
+  results: NearbyResult[];
+}
+
+export interface NearbySummary {
+  numResults: number;
+  totalResults: number;
+}
+
+export interface NearbyResult {
+  type: "POI";
+  id: string;
+  poi: {
+    name: string;
+    phone: string;
+    brands: { brands: string }[];
+    url: string;
+    categorySet: string;
+  };
+  address: {
+    streetName: string;
+    streetNumber: string;
+    municipality: string;
+    countryCode: string;
+    country: string;
+    freeFormAddress: string;
+    localName: string;
+  };
+  position: {
+    lat: number;
+    lon: number;
+  };
+}
+
 interface Geometry {
   location: Location;
   viewport: Viewport;
