@@ -147,6 +147,7 @@ function getNearbyPlaces(query: QueryType, lat: number, lon: number, key: string
       radius: 10000,
       language: query.language,
       categorySet: query.places_type,
+      relatedPois: 'child',
     },
   });
 }
