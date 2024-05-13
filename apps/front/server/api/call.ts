@@ -125,7 +125,11 @@ export default defineEventHandler(async (event) => {
       name: result.poi.name,
       lat: result.position.lat,
       long: result.position.lon,
-      formatted_address: `${result.address.streetNumber} ${result.address.streetName}, ${result.address.country}`,
+      formatted_address:
+        result.address.streetNumber +
+        result.address.streetName +
+        result.address.municipality +
+        result.address.municipality,
     }));
   }
 
