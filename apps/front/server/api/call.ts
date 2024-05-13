@@ -126,10 +126,10 @@ export default defineEventHandler(async (event) => {
       lat: result.position.lat,
       long: result.position.lon,
       formatted_address:
-        result.address.streetNumber +
-        result.address.streetName +
-        result.address.municipality +
-        result.address.municipality,
+        `${result.address.streetNumber ? result.address.streetNumber + ' ' : ''}` +
+        `${result.address.streetName ? result.address.streetName + ', ' : ''}` +
+        `${result.address.municipality ? result.address.municipality + ', ' : ''}` +
+        `${result.address.country ? result.address.country + ' ' : ''}`,
     }));
   }
 
