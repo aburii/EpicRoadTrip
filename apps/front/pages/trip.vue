@@ -88,9 +88,9 @@
                 <UTooltip v-if="!isWaypointAdded(item)" :text="t('trip.addTooltip')">
                   <UButton
                     class="text-xl"
+                    :disabled="waypointLoading"
                     @mouseover="showLocation(item as typeof markerSchema)"
                     @mouseleave="showLocation(null)"
-                    :disabled="waypointLoading"
                     @click="addWaypoint(item)"
                     >+</UButton
                   >

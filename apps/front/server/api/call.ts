@@ -38,7 +38,7 @@ type PlaceType = {
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
-  let places: PlaceType[] = [];
+  const places: PlaceType[] = [];
   let routes: RouteType[] = [];
 
   const query: QueryType = getQuery(event);
