@@ -92,6 +92,7 @@
       "password-length": "Le mot de passe doit contenir au moins {nb} caractères.",
       "confirm-password": "Les mots de passes doivent être indentiques."
     },
+    "forgotten-password": "Mot de passe oublié ?",
     "title": "Connexion ou inscription",
     "welcome": "Bienvenue sur Lana.",
     "hello": "Bonjour",
@@ -117,5 +118,9 @@
   "logout": "Vous avez été déconnecté.",
   "internal-error": "Une erreur inatendue est survenue, si le problème persiste, contactez-nous.",
   "no-data": "Aucune donnée disponible.",
-  "back": "Retour"
+  "back": "Retour",
+  "submit": "Soumettre",
+  "password-changed": "Le mot de passe à été changé avec succès.",
+  "password-change-fail": "Le mot de passe est identique au précédent.",
+  "email-sent": "Un e-mail a été envoyé."
 }
