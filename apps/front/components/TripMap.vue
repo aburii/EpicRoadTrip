@@ -25,6 +25,13 @@
       <Marker :options="markerStart" />
       <Marker :options="markerEnd" />
       <Marker
+        v-if="props.marker"
+        :options="{
+          position: { lat: props.marker.lat, lng: props.marker.long },
+          icon: markerTemp,
+        }"
+      />
+      <Marker
         v-for="(route, index) in slicedRoutes"
         :key="index"
         :options="{
@@ -76,7 +83,7 @@
             :options="{
               position: { lat: route.lat, lng: route.long },
               icon: markerIcon,
-              label: { text: (index + 1).toString(), color: 'white' },
+              label: { text: (index + 1).toString(), color: 'black' },
               title: route.name,
             }"
           />
@@ -91,7 +98,6 @@
 import { GoogleMap, Marker, Polyline } from 'vue3-google-map';
 import { decode } from '@mapbox/polyline';
 import { z } from 'zod';
-
 const { t } = useI18n();
 
 const runtimeConfig = useRuntimeConfig();
@@ -121,11 +127,18 @@ const RouteSchema = z.object({
   steps: z.array(StepSchema),
 });
 
+const markerSchema = z.object({
+  name: z.string(),
+  lat: z.number(),
+  long: z.number(),
+});
+
 export interface Props {
   routes?: z.infer<typeof RouteSchema>[];
   zoom?: number;
   fullscreenMap?: boolean;
   copyright?: boolean;
+  marker?: z.infer<typeof markerSchema>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -173,6 +186,13 @@ const markerIcon = {
   strokeWeight: 0,
   scale: 0.6,
   labelOrigin: { x: 24, y: -24 },
+};
+
+const markerTemp = {
+  fillColor: '#FF6B00',
+  fillOpacity: 1,
+  strokeWeight: 0,
+  scale: 2,
 };
 
 const markerStart = {
