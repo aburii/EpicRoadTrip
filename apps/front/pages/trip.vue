@@ -2,7 +2,7 @@
   <div>
     <TripLoading v-if="loading" />
     <div v-else class="relative w-screen h-screen">
-      <TripMap class="absolute z-0 w-screen h-screen" :routes="routes" />
+      <TripMap class="absolute z-0 w-screen h-screen" :routes="routes" :marker="marker" />
       <div
         class="absolute bottom-0 lg:top-0 left-0 right-0 lg:w-1/3 p-2 lg:p-6 lg:m-6 z-10 flex flex-col bg-white"
         :class="{ 'rounded-l': drawerOpen, rounded: !drawerOpen }"
@@ -39,7 +39,7 @@
               <span class="text-primary font-bold">{{ formatDate($route.query.d_end) }}</span>
             </p>
           </div>
-          <UTabs v-if="!collasped" :items="tabsItems" />
+          <UTabs v-if="!collasped" :items="tabsItems" @change="handleTabClick" />
         </div>
         <Transition
           enter-active-class="transition ease-out duration-300"
@@ -56,8 +56,8 @@
             <div v-for="item in places" :key="item" class="flex justify-between p-2">
               <div class="flex justify-between gap-2">
                 <img
-                  :src="`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${item.imgRef}&key=${apiKey}`"
-                  alt="Hotel Image"
+                  :src="imageSrc"
+                  alt="Image places"
                   class="w-20 h-20 lg:w-32 lg:h-32 object-cover rounded"
                 />
                 <div class="mx-2">
@@ -86,7 +86,12 @@
               </div>
               <div class="flex">
                 <UTooltip v-if="!isWaypointAdded(item)" :text="t('trip.addTooltip')">
-                  <UButton class="text-xl" :disabled="waypointLoading" @click="addWaypoint(item)"
+                  <UButton
+                    class="text-xl"
+                    @mouseover="showLocation(item as typeof markerSchema)"
+                    @mouseleave="showLocation(null)"
+                    :disabled="waypointLoading"
+                    @click="addWaypoint(item)"
                     >+</UButton
                   >
                 </UTooltip>
@@ -236,25 +241,12 @@ definePageMeta({
 
 const route = useRoute();
 const router = useRouter();
-const query = {
-  origin: route.query.departure,
-  destination: route.query.arrival,
-  ...(route.query.waypoints ? { waypoints: route.query.waypoints } : {}),
-};
-const {
-  data: fetchedData,
-  error,
-  execute,
-} = await useFetch('/api/call', {
-  immediate: false,
-  query,
-});
 
 const PlaceSchema = z.object({
-  imgRef: z.string(),
   name: z.string().nullable(),
-  rating: z.number().nullable().optional(),
   formatted_address: z.string().nullable().optional(),
+  lat: z.number(),
+  long: z.number(),
 });
 
 const StepSchema = z.object({
@@ -282,6 +274,12 @@ const DataSchema = z.object({
   status: z.string(),
 });
 
+const markerSchema = z.object({
+  name: z.string().nullable(),
+  lat: z.number().nullable(),
+  long: z.number().nullable(),
+});
+
 const loading = ref(true);
 const toast = useToast();
 const nmbrResults = ref<number>(0);
@@ -289,17 +287,45 @@ const waypointLoading = ref(false);
 const collasped = ref(false);
 const drawerOpen = ref(false);
 const authModalOpen = ref(false);
+const selectedType = ref('7314');
 const selectedItem = ref<Array<z.infer<typeof PlaceSchema>>>([]);
 const places = ref<Array<z.infer<typeof PlaceSchema>>>([]);
-const routes = ref<z.infer<typeof RouteSchema>>({
-  name: '',
-  lat: 0,
-  long: 0,
-  steps: [],
-});
+const routes = ref<z.infer<typeof RouteSchema>>([]);
+const marker = ref<z.infer<typeof markerSchema>>([]);
 const { t } = useI18n();
 const runtimeConfig = useRuntimeConfig();
 const apiKey = `${runtimeConfig.public.GOOGLE_API_KEY}`;
+
+const query = {
+  origin: route.query.departure,
+  places_type: selectedType.value,
+  destination: route.query.arrival,
+  ...(route.query.waypoints ? { waypoints: route.query.waypoints } : {}),
+  language: 'fr-FR',
+};
+const {
+  data: fetchedData,
+  error,
+  execute,
+} = await useFetch('/api/call', {
+  immediate: false,
+  query,
+});
+
+const imageSrc = computed(() => {
+  switch (selectedType.value) {
+    case '7314':
+      return 'https://em-content.zobj.net/source/apple/118/hotel_1f3e8.png';
+    case '7317':
+      return 'https://em-content.zobj.net/source/facebook/92/classical-building_1f3db-fe0f.png';
+    case '9376':
+      return 'https://em-content.zobj.net/source/apple/81/tropical-drink_1f379.png';
+    case '7315':
+      return 'https://em-content.zobj.net/source/apple/118/fork-and-knife-with-plate_1f37d.png';
+    default:
+      return 'https://i.pinimg.com/originals/56/13/d9/5613d9449b7ac04941fbef109f0506dd.png';
+  }
+});
 
 const isWaypointAdded = (item) => {
   const waypoints = route.query.waypoints && route.query.waypoints.split('|');
@@ -308,7 +334,7 @@ const isWaypointAdded = (item) => {
 
 const ranges = [
   { label: t('datePicker.ranges.oneDay'), duration: { days: 1 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { days: 7 } },
+  { label: t('datePicker.ranges.sevenDay'), duration: { days: 7 } },
   { label: t('datePicker.ranges.oneDay'), duration: { days: 14 } },
   { label: t('datePicker.ranges.oneDay'), duration: { months: 1 } },
   { label: t('datePicker.ranges.oneDay'), duration: { months: 3 } },
@@ -318,19 +344,20 @@ const ranges = [
 
 const tabsItems = [
   {
-    label: t('trip.types.all'),
-  },
-  {
     label: t('trip.types.hotel'),
+    id: '7314',
   },
   {
     label: t('trip.types.activity'),
+    id: '7317',
   },
   {
     label: t('trip.types.bar'),
+    id: '9376',
   },
   {
     label: t('trip.types.restaurant'),
+    id: '7315',
   },
 ];
 
@@ -368,6 +395,29 @@ const menuItems = [
 function showDrawer(item: typeof PlaceSchema) {
   selectedItem.value = item;
   drawerOpen.value = true;
+}
+
+function showLocation(item: typeof markerSchema) {
+  marker.value = item;
+}
+
+async function handleTabClick(index: number) {
+  waypointLoading.value = true;
+  const item = tabsItems[index];
+  selectedType.value = item.id;
+  query.places_type = selectedType.value;
+  await navigateTo({
+    query: {
+      departure: route.query.departure,
+      arrival: route.query.arrival,
+      places_type: item.id,
+      price: route.query.price,
+      d_start: route.query.d_start,
+      d_end: route.query.d_end,
+      waypoints: route.query.waypoints,
+    },
+  });
+  fetchData();
 }
 
 function showFilters() {

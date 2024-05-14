@@ -121,7 +121,7 @@ export default defineEventHandler(async (event) => {
       config.tomtomApiKey,
     );
 
-    places = placesFetched.results.map((result) => ({
+    const newPlaces = placesFetched.results.map((result) => ({
       name: result.poi.name,
       lat: result.position.lat,
       long: result.position.lon,
@@ -131,6 +131,7 @@ export default defineEventHandler(async (event) => {
         `${result.address.municipality ? result.address.municipality + ', ' : ''}` +
         `${result.address.country ? result.address.country + ' ' : ''}`,
     }));
+    places.push(...newPlaces);
   }
 
   return {
@@ -147,7 +148,7 @@ function getNearbyPlaces(query: QueryType, lat: number, lon: number, key: string
       key,
       lat,
       lon,
-      limit: 100,
+      limit: 30,
       radius: 10000,
       language: query.language,
       categorySet: query.places_type,
