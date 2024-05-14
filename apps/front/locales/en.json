@@ -94,6 +94,7 @@
       "password-length": "Password needs to contain at least {nb} characters.",
       "confirm-password": "Passwords must be identical."
     },
+    "forgotten-password": "Did you forget your password?",
     "title": "Sign-in or sign-up",
     "welcome": "Welcome to Lana.",
     "hello": "Hello",
@@ -120,5 +121,9 @@
   "logout": "You have been logged out.",
   "internal-error": "An unexpected error happened, if the problem persists, please contact us.",
   "no-data": "No data found!",
-  "back": "Back"
+  "back": "Back",
+  "submit": "Submit",
+  "password-changed": "The password has been changed successfully.",
+  "password-change-fail": "The password is identical to the previous one.",
+  "email-sent": "An email has been sent."
 }

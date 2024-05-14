@@ -15,6 +15,7 @@ const authEmailStep = ref<'email' | 'password' | 'confirmation'>('email');
 const userEmail = ref<string | undefined>();
 const passwordFieldType = ref<'password' | 'text'>('password');
 const confirmFieldType = ref<'password' | 'text'>('password');
+const localePath = useLocalePath();
 
 const emailFormSchema = z.object({
   email: z
@@ -157,6 +158,18 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
     loading.value = false;
   }
 }
+
+async function resetPassword() {
+  if (!userEmail.value) {
+    return;
+  }
+
+  await $supabase.auth.resetPasswordForEmail(userEmail.value, {
+    redirectTo: `${window.location.protocol}//${window.location.host}${localePath('/user')}`,
+  });
+
+  toast.add({ title: t('email-sent') });
+}
 </script>
 
 <template>
@@ -253,6 +266,16 @@ async function onEmailContinue(event: FormSubmitEvent<PasswordSchema>) {
                   />
                 </template>
               </UInput>
+
+              <UButton
+                v-if="existingUser"
+                variant="link"
+                class="mt-5"
+                color="primary"
+                @click="resetPassword()"
+              >
+                {{ t('authModal.forgotten-password') }}
+              </UButton>
             </UFormGroup>
 
             <UFormGroup name="passwordConfirm">
