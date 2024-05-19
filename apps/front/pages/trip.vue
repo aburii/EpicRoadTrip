@@ -260,8 +260,6 @@ const places = ref<Array<z.infer<typeof PlaceSchema>>>([]);
 const routes = ref<z.infer<typeof RouteSchema>>([]);
 const marker = ref<z.infer<typeof markerSchema>>(null);
 const { t } = useI18n();
-const runtimeConfig = useRuntimeConfig();
-const apiKey = `${runtimeConfig.public.GOOGLE_API_KEY}`;
 
 const query = {
   origin: route.query.departure,
