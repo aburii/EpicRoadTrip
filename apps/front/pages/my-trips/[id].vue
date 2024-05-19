@@ -22,13 +22,17 @@
               <span class="text-primary font-bold">{{ formatDate(mytrip.end_date) }}</span>
             </p>
           </div>
-          <UDropdown :items="menuItems" :popper="{ placement: 'bottom-start' }" class="m-2">
+          <UDropdown
+            :items="menuItems"
+            :popper="{ placement: 'bottom-start' }"
+            class="m-2 no-print"
+          >
             <UButton icon="i-heroicons-share-solid" color="primary" square variant="ghost" />
           </UDropdown>
         </div>
         <TripMap
           class="h-72 w-full"
-          :zoom="7"
+          :zoom="4"
           :routes="RouteCoords"
           :fullscreen-map="true"
           :copyright="true"
@@ -59,8 +63,6 @@
 </template>
 
 <script setup lang="ts">
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { z } from 'zod';
 
 const route = useRoute();
@@ -151,30 +153,8 @@ async function copyToClipboard() {
   toast.add({ title: 'Copied to clipboard' });
 }
 
-async function exportToPdf() {
-  toast.add({ title: 'Exporting to pdf' });
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  const elements = document.querySelectorAll('.pdf-content');
-  // eslint-disable-next-line new-cap
-  const pdf = new jsPDF('p', 'mm', 'a4');
-
-  let pdfHeight = 0;
-
-  for (let i = 0; i < elements.length; i++) {
-    const canvas = await html2canvas(elements[i]);
-    const imgData = canvas.toDataURL('image/png');
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-    pdf.addImage(imgData, 'PNG', 0, pdfHeight, pdfWidth, imgHeight);
-    pdfHeight += imgHeight;
-  }
-
-  pdf.save(
-    `${mytrip.value.origin} - ${mytrip.value.destination} (${mytrip.value.start_date}${mytrip.value.end_date}).pdf`,
-  );
+function exportToPdf() {
+  print();
 }
 
 async function fetchData() {

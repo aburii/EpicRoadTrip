@@ -22,7 +22,7 @@
             icon="i-heroicons-adjustments-horizontal-solid"
             @click="showFilters()"
           ></UButton>
-          <div class="mb-4">
+          <div class="mb-4 mx-4">
             <p>
               <span class="font-bold"> {{ t('trip.recap.1') }} </span>
               {{ t('trip.recap.2') }}
@@ -41,24 +41,17 @@
           </div>
           <UTabs v-if="!collasped" :items="tabsItems" @change="handleTabClick" />
         </div>
-        <Transition
-          enter-active-class="transition ease-out duration-300"
-          enter-class="opacity-0"
-          enter-to-class="opacity-100"
-          leave-active-class="transition ease-in duration-300"
-          leave-class="opacity-100"
-          leave-to-class="opacity-0"
+        <div
+          v-if="!collasped"
+          class="relative grid grid-cols-1 overflow-y-auto rounded mb-2 h-72 lg:h-auto"
         >
-          <div
-            v-if="!collasped"
-            class="relative grid grid-cols-1 overflow-y-auto rounded mb-2 h-72 lg:h-auto"
-          >
-            <div v-for="item in places" :key="item" class="flex justify-between p-2">
+          <div v-if="filteredPlaces.length > 0">
+            <div v-for="item in filteredPlaces" :key="item" class="flex justify-between p-2">
               <div class="flex justify-between gap-2">
                 <img
                   :src="imageSrc"
                   alt="Image places"
-                  class="w-20 h-20 lg:w-32 lg:h-32 object-cover rounded"
+                  class="w-20 h-20 lg:w-28 lg:h-28 object-cover rounded"
                 />
                 <div class="mx-2">
                   <div class="flex items-center">
@@ -75,11 +68,8 @@
                   />
                   <div class="my-2">
                     <h2 class="text-sm lg:text-xs">{{ item?.formatted_address }}</h2>
-                    <p
-                      class="text-xs underline text-primary cursor-pointer"
-                      @click="showDrawer(item)"
-                    >
-                      {{ t('trip.info') }}
+                    <p v-if="item.url" class="text-xs underline text-primary cursor-pointer">
+                      <a :href="fullUrl(item)" target="_blank">{{ t('trip.info') }}</a>
                     </p>
                   </div>
                 </div>
@@ -107,7 +97,23 @@
               </div>
             </div>
           </div>
-        </Transition>
+          <div v-for="i in 8" v-else :key="i" class="my-2">
+            <div class="flex justify-between gap-2">
+              <USkeleton class="w-20 h-20 lg:w-28 lg:h-28 object-cover rounded" />
+              <div class="mx-2">
+                <div class="flex">
+                  <USkeleton class="my-2 w-48 h-5" />
+                </div>
+                <div>
+                  <USkeleton class="my-2 w-36 h-3" />
+                </div>
+              </div>
+              <div class="flex">
+                <UButton class="text-xl" disabled="true">+</UButton>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="sticky bottom-0 h-min-64 flex flex-col items-center z-20 text-center">
           <div v-if="!collasped">
             <p class="text-xs lg:text-sm">
@@ -149,41 +155,6 @@
             variant="ghost"
             @click="drawerOpen = false"
           ></UButton>
-          <div class="relative grid grid-cols-1 gap-4 mt-6">
-            <div class="flex flex-col justify-center items-center mx-2">
-              <h2 class="text-xs lg:text-xl text-primary">
-                {{ selectedItem?.name }}
-              </h2>
-              <vue3StarRatings
-                v-if="selectedItem?.rating"
-                v-model="selectedItem.rating"
-                :star-size="16"
-                star-color="#FF6B00"
-                inactive-color="#595959"
-                :number-of-stars="5"
-                :disable-click="true"
-              />
-              <span class="text-secondary">
-                {{ selectedItem?.formatted_address }}
-              </span>
-              <span class="text-secondary">
-                {{ selectedItem?.international_phone_number }}
-              </span>
-            </div>
-            <img
-              v-if="selectedItem?.imgRef"
-              :src="`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${selectedItem?.imgRef}&key=${apiKey}`"
-              alt="Hotel Image"
-              class="w-full h-full object-cover rounded"
-            />
-            <UCard v-if="selectedItem?.editorial_summary">
-              <div>
-                <span>
-                  {{ selectedItem?.editorial_summary.overview }}
-                </span>
-              </div>
-            </UCard>
-          </div>
           <div v-if="selectedItem.length == 0">
             <div class="flex flex-col">
               <div class="space-y-4 md:space-x-2 md:space-y-0 mt-7 md:flex md:items-center md:mt-0">
@@ -205,14 +176,8 @@
                   size="md"
                 />
               </div>
-              <div class="space-y-4 md:space-x-2 md:space-y-0 mt-7 md:mt-0">
-                <DatePicker
-                  v-model="state.range"
-                  :ranges="ranges"
-                  pop-over-direction="bottom-start"
-                  class=""
-                  inner-style="text-md w-full font-light bg-transparent hover:bg-transparent focus:bg-transparent border-b-2 border-primary"
-                />
+              <div class="space-y-4 md:space-x-2 md:space-y-0 mt-7 md:mt-2">
+                <UInput v-model="filterWord" variant="outline" placeholder="Search..." />
               </div>
             </div>
           </div>
@@ -244,6 +209,7 @@ const router = useRouter();
 
 const PlaceSchema = z.object({
   name: z.string().nullable(),
+  url: z.string().nullable().optional(),
   formatted_address: z.string().nullable().optional(),
   lat: z.number(),
   long: z.number(),
@@ -287,11 +253,12 @@ const waypointLoading = ref(false);
 const collasped = ref(false);
 const drawerOpen = ref(false);
 const authModalOpen = ref(false);
-const selectedType = ref('7314');
+const selectedType = ref<String>('7314');
+const filterWord = ref<String>('');
 const selectedItem = ref<Array<z.infer<typeof PlaceSchema>>>([]);
 const places = ref<Array<z.infer<typeof PlaceSchema>>>([]);
 const routes = ref<z.infer<typeof RouteSchema>>([]);
-const marker = ref<z.infer<typeof markerSchema>>([]);
+const marker = ref<z.infer<typeof markerSchema>>(null);
 const { t } = useI18n();
 const runtimeConfig = useRuntimeConfig();
 const apiKey = `${runtimeConfig.public.GOOGLE_API_KEY}`;
@@ -332,16 +299,6 @@ const isWaypointAdded = (item) => {
   return waypoints && waypoints.includes(item.formatted_address);
 };
 
-const ranges = [
-  { label: t('datePicker.ranges.oneDay'), duration: { days: 1 } },
-  { label: t('datePicker.ranges.sevenDay'), duration: { days: 7 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { days: 14 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { months: 1 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { months: 3 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { months: 6 } },
-  { label: t('datePicker.ranges.oneDay'), duration: { years: 1 } },
-];
-
 const tabsItems = [
   {
     label: t('trip.types.hotel'),
@@ -361,10 +318,23 @@ const tabsItems = [
   },
 ];
 
+const filteredPlaces = computed(() => {
+  if (filterWord.value) {
+    return places.value.filter((place) =>
+      place.name.toLowerCase().includes(filterWord.value.toLowerCase()),
+    );
+  }
+  return places.value;
+});
+
+function getRandomIntString() {
+  const randomInt = Math.floor(Math.random() * 1000000);
+  return randomInt.toString();
+}
+
 const state = reactive({
-  departure: query.origin,
-  arrival: query.destination,
-  range: { start: new Date(route.query.d_start), end: new Date(route.query.d_end) },
+  departure: { name: query.origin, id: getRandomIntString() },
+  arrival: { name: query.destination, id: getRandomIntString() },
 });
 
 const menuItems = [
@@ -392,9 +362,29 @@ const menuItems = [
   ],
 ];
 
-function showDrawer(item: typeof PlaceSchema) {
-  selectedItem.value = item;
-  drawerOpen.value = true;
+watch(
+  state,
+  async (newState) => {
+    waypointLoading.value = true;
+    await navigateTo({
+      query: {
+        departure: newState.departure.name ? newState.departure.name : newState.departure,
+        arrival: newState.arrival.name ? newState.arrival.name : newState.arrival,
+        price: route.query.price,
+        d_start: route.query.d_start,
+        d_end: route.query.d_end,
+        waypoints: route.query.waypoints,
+      },
+    });
+    query.origin = route.query.departure;
+    query.destination = route.query.arrival;
+    fetchData();
+  },
+  { deep: true },
+);
+
+function fullUrl(item: { url?: string } | null | undefined): string {
+  return item && item.url ? `https://` + item.url : '';
 }
 
 function showLocation(item: typeof markerSchema) {
@@ -403,6 +393,7 @@ function showLocation(item: typeof markerSchema) {
 
 async function handleTabClick(index: number) {
   waypointLoading.value = true;
+  places.value = [];
   const item = tabsItems[index];
   selectedType.value = item.id;
   query.places_type = selectedType.value;
@@ -525,7 +516,7 @@ async function fetchData() {
     toast.add({ title: 'Failed to fetch data' });
   } else {
     const validatedData = DataSchema.parse(fetchedData.value);
-    if (validatedData.status === 'NOT_FOUND') {
+    if (validatedData.status === 'NOT_FOUND' || validatedData.status === 'ZERO_RESULTS') {
       waypointLoading.value = false;
       loading.value = false;
       router.back();

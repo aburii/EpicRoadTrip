@@ -66,65 +66,73 @@ function openAuthModal() {
 </script>
 
 <template>
-  <header class="min-h-[80px] bg-blue-500 md:px-16 px-4 py-2 bg-transparent">
-    <section class="w-full h-full flex items-center font justify-between">
-      <div class="w-1/3 text-start">
-        <UPopover :popper="{ placement: 'bottom-start' }">
-          <UButton
-            icon="i-heroicons-language"
-            size="xl"
-            color="black"
-            variant="ghost"
-            :trailing="false"
-          />
-
-          <template #panel>
+  <div>
+    <header class="min-h-[80px] bg-blue-500 md:px-16 px-4 py-2 bg-transparent">
+      <section class="w-full h-full flex items-center font justify-between">
+        <div class="w-1/3 text-start">
+          <UPopover :popper="{ placement: 'bottom-start' }">
             <UButton
-              v-for="loc in locales"
-              :key="loc.code"
-              variant="ghost"
-              class="block w-full"
+              icon="i-heroicons-language"
+              size="xl"
               color="black"
-              size="lg"
-              :ui="{ rounded: 'rounded-none' }"
-              @click="i18n.setLocale(loc.code)"
-            >
-              {{ loc.name }}
-            </UButton>
-          </template>
-        </UPopover>
-      </div>
-      <NuxtLink
-        class="font-title w-1/3 md:tracking-[0.8rem] tracking-[0.5rem] font-bold md:text-3xl text-2xl text-center uppercase"
-        :to="localePath('/')"
-      >
-        Lana
-      </NuxtLink>
-      <div class="w-1/3 text-end">
-        <UDropdown :items="authDropdownItems">
-          <UButton icon="i-heroicons-user-circle" size="xl" color="black" variant="ghost" trailing>
-            <template #default>
-              <span class="hidden lg:block">
-                {{ user?.email }}
-              </span>
-            </template>
-          </UButton>
-          <template #account="{ item }">
-            <div class="text-left">
-              <p>{{ item.label }}</p>
-              <p class="truncate font-medium text-gray-900 dark:text-white">{{ user?.email }}</p>
-            </div>
-          </template>
-          <template #item="{ item }">
-            <span class="truncate">{{ item.label }}</span>
+              variant="ghost"
+              :trailing="false"
+            />
 
-            <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 dark:text-gray-500 ms-auto" />
-          </template>
-        </UDropdown>
-      </div>
-      <AppAuthModal v-model:open="authModalOpen" />
-    </section>
-  </header>
+            <template #panel>
+              <UButton
+                v-for="loc in locales"
+                :key="loc.code"
+                variant="ghost"
+                class="block w-full"
+                color="black"
+                size="lg"
+                :ui="{ rounded: 'rounded-none' }"
+                @click="i18n.setLocale(loc.code)"
+              >
+                {{ loc.name }}
+              </UButton>
+            </template>
+          </UPopover>
+        </div>
+        <NuxtLink
+          class="font-title w-1/3 md:tracking-[0.8rem] tracking-[0.5rem] font-bold md:text-3xl text-2xl text-center uppercase"
+          :to="localePath('/')"
+        >
+          Lana
+        </NuxtLink>
+        <div class="w-1/3 text-end">
+          <UDropdown :items="authDropdownItems">
+            <UButton
+              icon="i-heroicons-user-circle"
+              size="xl"
+              color="black"
+              variant="ghost"
+              trailing
+            >
+              <template #default>
+                <span class="hidden lg:block">
+                  {{ user?.email }}
+                </span>
+              </template>
+            </UButton>
+            <template #account="{ item }">
+              <div class="text-left">
+                <p>{{ item.label }}</p>
+                <p class="truncate font-medium text-gray-900 dark:text-white">{{ user?.email }}</p>
+              </div>
+            </template>
+            <template #item="{ item }">
+              <span class="truncate">{{ item.label }}</span>
+
+              <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 dark:text-gray-500 ms-auto" />
+            </template>
+          </UDropdown>
+        </div>
+        <AppAuthModal v-model:open="authModalOpen" />
+      </section>
+    </header>
+  </div>
 </template>
 
 <style scoped></style>

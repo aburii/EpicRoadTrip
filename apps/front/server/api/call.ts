@@ -100,7 +100,7 @@ export default defineEventHandler(async (event) => {
   );
   for (let i = 0; i < allSteps.length; i++) {
     let sum = 0;
-    if (allSteps[i].distance + sum >= roadDistance / 10) {
+    if (allSteps[i].distance + sum >= roadDistance / 20) {
       placesSteps.push(allSteps[i]);
       sum = 0;
     }
@@ -120,9 +120,11 @@ export default defineEventHandler(async (event) => {
       i % 2 === 0 ? placesStep.start_location.lng : placesStep.end_location.lng,
       config.tomtomApiKey,
     );
-
     const newPlaces = placesFetched.results.map((result) => ({
       name: result.poi.name,
+      url: result.poi.url,
+      categorires: result.poi.categories,
+      classifications: result.poi.classifications,
       lat: result.position.lat,
       long: result.position.lon,
       formatted_address:
@@ -148,7 +150,7 @@ function getNearbyPlaces(query: QueryType, lat: number, lon: number, key: string
       key,
       lat,
       lon,
-      limit: 30,
+      limit: 25,
       radius: 10000,
       language: query.language,
       categorySet: query.places_type,
