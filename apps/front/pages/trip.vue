@@ -372,6 +372,7 @@ watch(
         d_start: route.query.d_start,
         d_end: route.query.d_end,
         waypoints: route.query.waypoints,
+        id: route.query.id,
       },
     });
     query.origin = route.query.departure;
@@ -404,6 +405,7 @@ async function handleTabClick(index: number) {
       d_start: route.query.d_start,
       d_end: route.query.d_end,
       waypoints: route.query.waypoints,
+      id: route.query.id,
     },
   });
   fetchData();
@@ -434,6 +436,7 @@ async function addWaypoint(item: { formatted_address: String }) {
       d_start: route.query.d_start,
       d_end: route.query.d_end,
       waypoints: waypoint,
+      id: route.query.id,
     },
   });
   query.origin = route.query.departure;
@@ -455,6 +458,7 @@ async function removeWaypoint(item: { formatted_address: String }) {
       d_start: route.query.d_start,
       d_end: route.query.d_end,
       waypoints: waypointsParam,
+      id: route.query.id,
     },
   });
   query.origin = route.query.departure;
@@ -473,37 +477,58 @@ function openAuthModal() {
 
 async function validateTrip() {
   const { data } = await $supabase.auth.getSession();
+  const url = new URL(route.fullPath, window.location.origin);
+  url.searchParams.delete('id');
+  const fullPath = url.pathname + url.search;
 
   if (!data || !data.session) {
     openAuthModal();
     return;
   }
   try {
-    const { data, error } = await $supabase
-      .from('trips')
-      .insert([
-        {
+    let data, error;
+    if (route.query.id) {
+      // Update existing trip
+      ({ data, error } = await $supabase
+        .from('trips')
+        .update({
           origin: route.query.departure,
           destination: route.query.arrival,
           waypoints: route.query.waypoints,
           route: routes.value,
           start_date: route.query.d_start,
           end_date: route.query.d_end,
-          path: route.fullPath,
-        },
-      ])
-      .select();
+          path: fullPath,
+        })
+        .eq('id', route.query.id));
+    } else {
+      // Insert new trip
+      ({ data, error } = await $supabase
+        .from('trips')
+        .insert([
+          {
+            origin: route.query.departure,
+            destination: route.query.arrival,
+            waypoints: route.query.waypoints,
+            route: routes.value,
+            start_date: route.query.d_start,
+            end_date: route.query.d_end,
+            path: route.fullPath,
+          },
+        ])
+        .select());
+    }
 
     if (error) {
-      console.error('Error inserting trip:', error);
+      toast.add({ title: 'Failed to save/update trip' });
       return;
     }
-    const tripId = data[0].id;
+    const tripId = data ? data[0].id : route.query.id;
     await navigateTo({
       path: localePath('/my-trips/' + tripId),
     });
   } catch (error) {
-    console.error('Unexpected error:', error);
+    toast.add({ title: 'Unexpected Error' });
   }
 }
 
