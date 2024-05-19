@@ -43,6 +43,7 @@
     "start": "Start",
     "stop": "Stop",
     "validate": "Validate",
+    "save": "Save changes",
     "home": "Home",
     "mytrips": "My trips",
     "remove": "Remove",

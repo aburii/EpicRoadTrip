@@ -122,7 +122,9 @@
             </p>
           </div>
           <div class="xl:hidden lg:hidden">
-            <UButton class="my-2" @click="validateTrip()">{{ t('trip.validate') }} </UButton>
+            <UButton class="my-2" @click="validateTrip()">
+              {{ route.query.id ? t('trip.save') : t('trip.validate') }}
+            </UButton>
           </div>
         </div>
       </div>
@@ -132,9 +134,9 @@
         </UDropdown>
       </div>
       <div class="absolute bottom-0 right-0 xl:block lg:block sm:hidden m-6">
-        <UButton size="xl" class="text-xl mx-2" @click="validateTrip()">{{
-          t('trip.validate')
-        }}</UButton>
+        <UButton size="xl" class="my-2" @click="validateTrip()">
+          {{ route.query.id ? t('trip.save') : t('trip.validate') }}
+        </UButton>
       </div>
       <!-- DRAWER -->
       <Transition
