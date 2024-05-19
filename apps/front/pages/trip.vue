@@ -212,6 +212,7 @@ const router = useRouter();
 const PlaceSchema = z.object({
   name: z.string().nullable(),
   url: z.string().nullable().optional(),
+  categories: z.array(z.string()).nullable().optional(),
   formatted_address: z.string().nullable().optional(),
   lat: z.number(),
   long: z.number(),
@@ -259,6 +260,7 @@ const selectedType = ref<String>('7314');
 const filterWord = ref<String>('');
 const selectedItem = ref<Array<z.infer<typeof PlaceSchema>>>([]);
 const places = ref<Array<z.infer<typeof PlaceSchema>>>([]);
+const selectedPlaces = ref<Array<z.infer<typeof PlaceSchema>>>([]);
 const routes = ref<z.infer<typeof RouteSchema>>([]);
 const marker = ref<z.infer<typeof markerSchema>>(null);
 const { t } = useI18n();
@@ -426,6 +428,7 @@ const invertDestinations = () => {
 };
 
 async function addWaypoint(item: { formatted_address: String }) {
+  selectedPlaces.value.push(item);
   waypointLoading.value = true;
   const waypoint = route.query.waypoints
     ? `${route.query.waypoints}|${item.formatted_address}`
@@ -448,6 +451,7 @@ async function addWaypoint(item: { formatted_address: String }) {
 }
 
 async function removeWaypoint(item: { formatted_address: String }) {
+  selectedPlaces.value = selectedPlaces.value.filter((place) => item.formatted_address !== place.formatted_address);
   waypointLoading.value = true;
   let waypoints = route.query.waypoints ? route.query.waypoints.split('|') : [];
   waypoints = waypoints.filter((waypoint) => waypoint !== item.formatted_address);
@@ -490,7 +494,6 @@ async function validateTrip() {
   try {
     let data, error;
     if (route.query.id) {
-      // Update existing trip
       ({ data, error } = await $supabase
         .from('trips')
         .update({
@@ -501,6 +504,7 @@ async function validateTrip() {
           start_date: route.query.d_start,
           end_date: route.query.d_end,
           path: fullPath,
+          places: selectedPlaces.value,
         })
         .eq('id', route.query.id));
     } else {
@@ -515,7 +519,8 @@ async function validateTrip() {
             route: routes.value,
             start_date: route.query.d_start,
             end_date: route.query.d_end,
-            path: route.fullPath,
+            path: fullPath,
+            places: selectedPlaces.value,
           },
         ])
         .select());
@@ -534,9 +539,17 @@ async function validateTrip() {
   }
 }
 
+async function getPlaces() {
+  if (route.query.id) {
+    const { data: trip } = await $supabase.from('trips').select('places').eq('id', route.query.id);
+    selectedPlaces.value = trip[0] ? trip[0].places : [];
+  } else {
+    selectedPlaces.value = [];
+  }
+}
+
 async function fetchData() {
   await execute();
-
   if (!fetchedData || error.value) {
     toast.add({ title: 'Failed to fetch data' });
   } else {
@@ -556,5 +569,10 @@ async function fetchData() {
   }
 }
 
-onMounted(fetchData);
+async function onMountedHandler() {
+  await fetchData();
+  await getPlaces();
+}
+
+onMounted(onMountedHandler);
 </script>

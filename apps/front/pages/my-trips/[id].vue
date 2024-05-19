@@ -41,12 +41,23 @@
           <h2 class="font-bold text-md lg:text-lg mx-4">{{ t('trip.waypoints') }}</h2>
         </div>
         <div class="text-lg p-4 mb-4">
-          <div v-for="(coord, index) in RouteCoords" :key="index">
+          <div v-for="(place, index) in mytrip.places" :key="index">
             <div class="mb-1">
-              <UBadge class="my-2" color="white" variant="solid">{{
-                formatDate(dates[index])
-              }}</UBadge>
-              <h2 class="font-bold text-primary text-sm lg:text-md mb-2">{{ coord.name }}</h2>
+              <a v-if="place.url" :href="fullUrl(place)" target="_blank" rel="noopener noreferrer"
+                ><UBadge class="my-2 mr-2" color="primary" variant="solid">{{
+                  'website'
+                }}</UBadge></a
+              >
+              <UBadge
+                v-for="categorie in place.categories"
+                :key="categorie"
+                class="my-2 mr-2"
+                color="white"
+                variant="solid"
+                >{{ categorie }}</UBadge
+              >
+              <h2 class="font-bold text-primary text-sm lg:text-md mb-2">{{ place.name }}</h2>
+              <p class="text-sm lg:text-md">{{ place.formatted_address }}</p>
               <UDivider />
             </div>
           </div>
@@ -86,6 +97,16 @@ const TripSchema = z
     user_id: z.string(),
     origin: z.string(),
     destination: z.string(),
+    places: z.array(
+      z.object({
+        name: z.string(),
+        lat: z.number(),
+        long: z.number(),
+        formatted_address: z.string(),
+        url: z.string().optional(),
+        categories: z.array(z.string()).optional(),
+      }),
+    ),
   })
   .nullable();
 
@@ -98,11 +119,8 @@ const StepSchema = z.object({
 
 const RouteCoordsSchema = z.array(StepSchema).nullable();
 
-const DateSchema = z.array(z.instanceof(Date));
-
 const mytrip = ref<z.infer<typeof TripSchema>>(null);
 const RouteCoords = ref<z.infer<typeof RouteCoordsSchema>>(null);
-const dates = ref<z.infer<typeof DateSchema>>([]);
 
 definePageMeta({
   layout: 'default',
@@ -135,19 +153,6 @@ const menuItems = [
   ],
 ];
 
-function getDatesBetween(startDate: Date | string, endDate: Date | string): Date[] {
-  const dates = [];
-  let currentDate = new Date(startDate).getTime();
-  const end = new Date(endDate).getTime();
-
-  while (currentDate <= end) {
-    dates.push(new Date(currentDate));
-    currentDate += 24 * 60 * 60 * 1000;
-  }
-
-  return dates;
-}
-
 async function copyToClipboard() {
   await navigator.clipboard.writeText(window.location.href);
   toast.add({ title: 'Copied to clipboard' });
@@ -157,6 +162,10 @@ function exportToPdf() {
   print();
 }
 
+function fullUrl(item: { url?: string } | null | undefined): string {
+  return item && item.url ? `https://` + item.url : '';
+}
+
 async function fetchData() {
   const { data: trip, error } = await $supabase.from('trips').select('*').eq('id', id);
   if (error) {
@@ -164,7 +173,6 @@ async function fetchData() {
   } else if (trip && trip.length > 0) {
     mytrip.value = trip[0];
     RouteCoords.value = trip[0].route;
-    dates.value = getDatesBetween(mytrip.value.start_date, mytrip.value.end_date);
   } else {
     console.log('No trip found with id:', id);
   }

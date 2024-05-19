@@ -123,7 +123,7 @@ export default defineEventHandler(async (event) => {
     const newPlaces = placesFetched.results.map((result) => ({
       name: result.poi.name,
       url: result.poi.url,
-      categorires: result.poi.categories,
+      categories: result.poi.categories,
       classifications: result.poi.classifications,
       lat: result.position.lat,
       long: result.position.lon,
