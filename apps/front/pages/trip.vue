@@ -22,7 +22,7 @@
             icon="i-heroicons-adjustments-horizontal-solid"
             @click="showFilters()"
           ></UButton>
-          <div class="mb-4 mx-4">
+          <div class="mb-4 mx-5">
             <p>
               <span class="font-bold"> {{ t('trip.recap.1') }} </span>
               {{ t('trip.recap.2') }}
