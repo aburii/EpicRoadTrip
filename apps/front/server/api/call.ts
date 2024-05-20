@@ -113,7 +113,7 @@ export default defineEventHandler(async (event) => {
 
   for (let i = 0; i < placesSteps.length; i++) {
     const placesStep = placesSteps[i];
-
+    await new Promise((resolve) => setTimeout(resolve, 300));
     const placesFetched = await getNearbyPlaces(
       query,
       i % 2 === 0 ? placesStep.start_location.lat : placesStep.end_location.lat,
