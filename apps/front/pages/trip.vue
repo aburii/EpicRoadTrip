@@ -451,7 +451,9 @@ async function addWaypoint(item: { formatted_address: String }) {
 }
 
 async function removeWaypoint(item: { formatted_address: String }) {
-  selectedPlaces.value = selectedPlaces.value.filter((place) => item.formatted_address !== place.formatted_address);
+  selectedPlaces.value = selectedPlaces.value.filter(
+    (place) => item.formatted_address !== place.formatted_address,
+  );
   waypointLoading.value = true;
   let waypoints = route.query.waypoints ? route.query.waypoints.split('|') : [];
   waypoints = waypoints.filter((waypoint) => waypoint !== item.formatted_address);
