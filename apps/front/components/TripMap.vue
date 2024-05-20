@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <USkeleton v-if="loading" class="w-full h-full" />
-    <div v-if="fullscreenMap" class="absolute top-0 right-0 m-2 z-10">
+    <div v-if="fullscreenMap" class="absolute top-0 right-0 m-2 z-10 no-print">
       <UButton
         icon="i-heroicons-arrows-pointing-out"
         color="primary"
@@ -28,7 +28,6 @@
         v-if="props.marker"
         :options="{
           position: { lat: props.marker.lat, lng: props.marker.long },
-          icon: markerTemp,
         }"
       />
       <Marker
@@ -83,7 +82,7 @@
             :options="{
               position: { lat: route.lat, lng: route.long },
               icon: markerIcon,
-              label: { text: (index + 1).toString(), color: 'black' },
+              label: { text: (index + 1).toString(), color: 'white' },
               title: route.name,
             }"
           />
@@ -98,6 +97,7 @@
 import { GoogleMap, Marker, Polyline } from 'vue3-google-map';
 import { decode } from '@mapbox/polyline';
 import { z } from 'zod';
+
 const { t } = useI18n();
 
 const runtimeConfig = useRuntimeConfig();
@@ -166,14 +166,26 @@ const tripPath = computed(() => ({
   strokeWeight: 5,
 }));
 
-const startPoint = reactive({
-  lat: props.routes[0].lat,
-  lng: props.routes[0].long,
-});
-const endPoint = reactive({
-  lat: props.routes[props.routes.length - 1].lat,
-  lng: props.routes[props.routes.length - 1].long,
-});
+const markerStart = computed(() => ({
+  position: {
+    lat: props.routes[0]?.lat,
+    lng: props.routes[0]?.long,
+  },
+  label: { text: t('trip.start'), color: 'white', fontSize: '10px' },
+  title: 'Starting Point',
+  icon: markerIcon,
+}));
+
+const markerEnd = computed(() => ({
+  position: {
+    lat: props.routes[props.routes.length - 1]?.lat,
+    lng: props.routes[props.routes.length - 1]?.long,
+  },
+  label: { text: t('trip.stop'), color: 'white', fontSize: '10px' },
+  title: 'Ending Point',
+  icon: markerIcon,
+}));
+
 const center = reactive({
   lat: props.routes[0].lat,
   lng: props.routes[0].long,
@@ -186,27 +198,6 @@ const markerIcon = {
   strokeWeight: 0,
   scale: 0.6,
   labelOrigin: { x: 24, y: -24 },
-};
-
-const markerTemp = {
-  fillColor: '#FF6B00',
-  fillOpacity: 1,
-  strokeWeight: 0,
-  scale: 2,
-};
-
-const markerStart = {
-  position: startPoint,
-  label: { text: t('trip.start'), color: 'white', fontSize: '10px' },
-  title: 'Starting Point',
-  icon: markerIcon,
-};
-
-const markerEnd = {
-  position: endPoint,
-  label: { text: t('trip.stop'), color: 'white', fontSize: '10px' },
-  title: 'Ending Point',
-  icon: markerIcon,
 };
 
 watch(

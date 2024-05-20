@@ -119,7 +119,7 @@ const menuItems = [
 ];
 
 async function editTrip(path) {
-  await navigateTo(path);
+  await navigateTo(path + '&id=' + selectedTrip.value.id);
 }
 
 async function deleteTrip(tripId) {

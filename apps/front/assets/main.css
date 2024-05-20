@@ -19,3 +19,11 @@ body,
   --font-family: 'Raleway', system-ui, sans-serif;
   --font-title: 'Ubanist', system-ui, sans-serif;
 }
+
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}

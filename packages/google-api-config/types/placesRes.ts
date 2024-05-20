@@ -45,6 +45,8 @@ export interface NearbyResult {
     brands: { brands: string }[];
     url: string;
     categorySet: string;
+    categories: string[];
+    classifications: string[];
   };
   address: {
     streetName: string;

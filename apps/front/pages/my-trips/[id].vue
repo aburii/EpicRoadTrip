@@ -22,13 +22,17 @@
               <span class="text-primary font-bold">{{ formatDate(mytrip.end_date) }}</span>
             </p>
           </div>
-          <UDropdown :items="menuItems" :popper="{ placement: 'bottom-start' }" class="m-2">
+          <UDropdown
+            :items="menuItems"
+            :popper="{ placement: 'bottom-start' }"
+            class="m-2 no-print"
+          >
             <UButton icon="i-heroicons-share-solid" color="primary" square variant="ghost" />
           </UDropdown>
         </div>
         <TripMap
           class="h-72 w-full"
-          :zoom="7"
+          :zoom="4"
           :routes="RouteCoords"
           :fullscreen-map="true"
           :copyright="true"
@@ -37,12 +41,23 @@
           <h2 class="font-bold text-md lg:text-lg mx-4">{{ t('trip.waypoints') }}</h2>
         </div>
         <div class="text-lg p-4 mb-4">
-          <div v-for="(coord, index) in RouteCoords" :key="index">
+          <div v-for="(place, index) in mytrip.places" :key="index">
             <div class="mb-1">
-              <UBadge class="my-2" color="white" variant="solid">{{
-                formatDate(dates[index])
-              }}</UBadge>
-              <h2 class="font-bold text-primary text-sm lg:text-md mb-2">{{ coord.name }}</h2>
+              <a v-if="place.url" :href="fullUrl(place)" target="_blank" rel="noopener noreferrer"
+                ><UBadge class="my-2 mr-2" color="primary" variant="solid">{{
+                  'website'
+                }}</UBadge></a
+              >
+              <UBadge
+                v-for="categorie in place.categories"
+                :key="categorie"
+                class="my-2 mr-2"
+                color="white"
+                variant="solid"
+                >{{ categorie }}</UBadge
+              >
+              <h2 class="font-bold text-primary text-sm lg:text-md mb-2">{{ place.name }}</h2>
+              <p class="text-sm lg:text-md">{{ place.formatted_address }}</p>
               <UDivider />
             </div>
           </div>
@@ -59,8 +74,6 @@
 </template>
 
 <script setup lang="ts">
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { z } from 'zod';
 
 const route = useRoute();
@@ -84,6 +97,16 @@ const TripSchema = z
     user_id: z.string(),
     origin: z.string(),
     destination: z.string(),
+    places: z.array(
+      z.object({
+        name: z.string(),
+        lat: z.number(),
+        long: z.number(),
+        formatted_address: z.string(),
+        url: z.string().optional(),
+        categories: z.array(z.string()).optional(),
+      }),
+    ),
   })
   .nullable();
 
@@ -96,11 +119,8 @@ const StepSchema = z.object({
 
 const RouteCoordsSchema = z.array(StepSchema).nullable();
 
-const DateSchema = z.array(z.instanceof(Date));
-
 const mytrip = ref<z.infer<typeof TripSchema>>(null);
 const RouteCoords = ref<z.infer<typeof RouteCoordsSchema>>(null);
-const dates = ref<z.infer<typeof DateSchema>>([]);
 
 definePageMeta({
   layout: 'default',
@@ -133,48 +153,17 @@ const menuItems = [
   ],
 ];
 
-function getDatesBetween(startDate: Date | string, endDate: Date | string): Date[] {
-  const dates = [];
-  let currentDate = new Date(startDate).getTime();
-  const end = new Date(endDate).getTime();
-
-  while (currentDate <= end) {
-    dates.push(new Date(currentDate));
-    currentDate += 24 * 60 * 60 * 1000;
-  }
-
-  return dates;
-}
-
 async function copyToClipboard() {
   await navigator.clipboard.writeText(window.location.href);
   toast.add({ title: 'Copied to clipboard' });
 }
 
-async function exportToPdf() {
-  toast.add({ title: 'Exporting to pdf' });
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+function exportToPdf() {
+  print();
+}
 
-  const elements = document.querySelectorAll('.pdf-content');
-  // eslint-disable-next-line new-cap
-  const pdf = new jsPDF('p', 'mm', 'a4');
-
-  let pdfHeight = 0;
-
-  for (let i = 0; i < elements.length; i++) {
-    const canvas = await html2canvas(elements[i]);
-    const imgData = canvas.toDataURL('image/png');
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-    pdf.addImage(imgData, 'PNG', 0, pdfHeight, pdfWidth, imgHeight);
-    pdfHeight += imgHeight;
-  }
-
-  pdf.save(
-    `${mytrip.value.origin} - ${mytrip.value.destination} (${mytrip.value.start_date}${mytrip.value.end_date}).pdf`,
-  );
+function fullUrl(item: { url?: string } | null | undefined): string {
+  return item && item.url ? `https://` + item.url : '';
 }
 
 async function fetchData() {
@@ -184,7 +173,6 @@ async function fetchData() {
   } else if (trip && trip.length > 0) {
     mytrip.value = trip[0];
     RouteCoords.value = trip[0].route;
-    dates.value = getDatesBetween(mytrip.value.start_date, mytrip.value.end_date);
   } else {
     console.log('No trip found with id:', id);
   }
